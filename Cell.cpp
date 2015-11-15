@@ -6,11 +6,12 @@
 */
 
 #include <iostream>
-#include <vector>
+#include <string>
+
 #include "Cell.h"
 
 Cell::Cell()
-	: axisX(NULL), axisY(' '), who(' ')
+	: axisX(NULL), axisY(" "), who(NULL)
 {
 
 }
@@ -22,13 +23,25 @@ Cell::Cell(const Cell& copyCell)
 	who = copyCell.who;
 }
 
+Cell::Cell(string newAxisY)
+	: axisY(newAxisY)
+{
+
+}
+
 Cell::Cell(char newWho)
 	: who(newWho)
 {
 
 }
 
-Cell::Cell(int newAxisX, char newAxisY, char newWho)
+
+Cell::Cell(int newAxisX, char newWho)
+	: axisX(newAxisX), who(newWho)
+{
+}
+
+Cell::Cell(int newAxisX, string newAxisY, char newWho)
 	: axisX(newAxisX), axisY(newAxisY), who(newWho)
 {
 

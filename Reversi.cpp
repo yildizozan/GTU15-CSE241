@@ -6,6 +6,7 @@
 */
 #include <vector>
 #include <iostream>
+#include <string>
 
 #include "Cell.h"
 #include "Reversi.h"
@@ -22,10 +23,10 @@ Reversi::Reversi()
 
 	expand();
 
-	gameCell[1][1] = Cell(1, 'a', 'X');
-	gameCell[1][2] = Cell(1, 'b', 'O');
-	gameCell[2][1] = Cell(1, 'a', 'O');
-	gameCell[2][2] = Cell(1, 'b', 'X');
+	gameCell[1][1] = Cell(1, 'X');
+	gameCell[1][2] = Cell(1, 'O');
+	gameCell[2][1] = Cell(1, 'O');
+	gameCell[2][2] = Cell(1, 'X');
 
 }
 
@@ -37,13 +38,28 @@ void Reversi::input(const int newAxisX, const char newAxisY)
 
 }
 
+// Output function
 void Reversi::output(void)
 {
-	for (int i = 0; i < row; i++)
+	for (int i = 0; i < row + 1; i++)
 	{
-		for (int j = 0; j < column; j++)
-			cout << " " << gameCell[i][j].get_Who() << " ";
-		cout << "\n";
+		if (i < row)
+		{
+			cout << i + 1 << "\t";
+
+			for (int j = 0; j < column; j++)
+				cout << " " << gameCell[i][j].get_Who() << " ";
+			cout << "\n";
+		}
+		else
+		{
+			cout << "\t";
+
+			for (int k = 0; k < column; k++)
+			{
+				cout << "x" << k+1 << " ";
+			}	// end for j = 97
+		}
 	}
 
 	expand();
@@ -71,8 +87,12 @@ void Reversi::expand()
 	// All member of vector should be zero
 	for (int i = 0; i < getRow(); i++)
 		for (int j = 0; j < getColumn(); j++)
-			gameCell[i][j] = Cell('-');
+		{
+			gameCell[i][j] = Cell();
+			string str = "x" + to_string(j+1);
+			gameCell[i][j] = Cell(i+1, str, 217);
 
+		}
 	copy();
 }
 
