@@ -13,13 +13,18 @@ using namespace std;
 class Reversi {
 public:
     Reversi();
+
     
-    void set_gameCell();
+    const int get_row() const { return row; }
+    const int get_column() const { return column; }
 
 private:
+    int row, column;
+    
     vector< vector<Cell> > gameCell;
 
 };
 
 #endif	/* REVERSI_H */
 
+    
