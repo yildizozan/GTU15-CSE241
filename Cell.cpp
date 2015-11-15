@@ -7,6 +7,9 @@
 
 #include "Cell.h"
 
-Cell::Cell() {
+Cell::Cell()
+        :axisX(0), axisY('a'), who('X')
+{
+    
 }
 
