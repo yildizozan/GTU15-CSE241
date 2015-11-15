@@ -10,7 +10,7 @@
 #include "Cell.h"
 
 Cell::Cell()
-	: axisX(0), axisY(' '), who(' ')
+	: axisX(NULL), axisY(' '), who(' ')
 {
 
 }
@@ -20,6 +20,12 @@ Cell::Cell(const Cell& copyCell)
 	axisX = copyCell.axisX;
 	axisY = copyCell.axisY;
 	who = copyCell.who;
+}
+
+Cell::Cell(char newWho)
+	: who(newWho)
+{
+
 }
 
 Cell::Cell(int newAxisX, char newAxisY, char newWho)

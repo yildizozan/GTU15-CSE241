@@ -6,9 +6,7 @@
 */
 #include <vector>
 #include <iostream>
-#include "Cell.h"
-#include <iostream>
-#include <vector>
+
 #include "Cell.h"
 #include "Reversi.h"
 
@@ -22,10 +20,12 @@ Reversi::Reversi()
 	for (int i = 0; i < row; i++)
 		gameCell[i].resize(column);
 
-	gameCell[0][0] = Cell(1, 'a', 'X');
-	gameCell[0][1] = Cell(1, 'b', 'O');
-	gameCell[1][0] = Cell(1, 'a', 'O');
-	gameCell[1][1] = Cell(1, 'b', 'X');
+	expand();
+
+	gameCell[1][1] = Cell(1, 'a', 'X');
+	gameCell[1][2] = Cell(1, 'b', 'O');
+	gameCell[2][1] = Cell(1, 'a', 'O');
+	gameCell[2][2] = Cell(1, 'b', 'X');
 
 }
 
@@ -42,7 +42,45 @@ void Reversi::output(void)
 	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < column; j++)
-			cout << gameCell[i][j].get_Who();
+			cout << " " << gameCell[i][j].get_Who() << " ";
 		cout << "\n";
 	}
+
+	expand();
+}
+
+void Reversi::expand()
+{
+	gameCellTemp = gameCell;
+
+	// New row value
+	int temp = getRow();
+	setRow(temp + 2);
+
+	// Row expand for gameCell
+	gameCell.resize(getRow());
+
+	// New column value
+	temp = getColumn();
+	setColumn(temp + 2);
+
+	// Column expand for gameCell
+	for (int i = 0; i < gameCell.size(); i++)
+		gameCell[i].resize(getColumn());
+
+	// All member of vector should be zero
+	for (int i = 0; i < getRow(); i++)
+		for (int j = 0; j < getColumn(); j++)
+			gameCell[i][j] = Cell('-');
+
+	copy();
+}
+
+void Reversi::copy()
+{
+	// Create new matrix
+	for (int i = 0; i < getRow() - 2; i++)
+		for (int j = 0; j < getColumn() - 2; j++)
+			gameCell[i + 1][j + 1] = gameCellTemp[i][j];
+
 }

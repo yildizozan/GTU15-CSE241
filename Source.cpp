@@ -19,6 +19,14 @@ int main()
 {
 	Reversi asd;
 	asd.output();
+	cout << "\n";
+	asd.output();
+	cout << "\n";
+	asd.output();
+	cout << "\n";
+	asd.output();
+	cout << "\n";
+	asd.output();
 
 	cout << "\n";
 	system("PAUSE");

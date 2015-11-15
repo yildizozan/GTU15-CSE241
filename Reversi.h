@@ -15,21 +15,28 @@ public:
 	Reversi();
 
 	// Mutator & Accessor
-	int get_Row() const { return row; }
-	void set_Row(const int newRow) { row = newRow; }
+	int getRow() { return row; }
+	void setRow(const int newRow) { row = newRow; }
 
-	int get_Column() const { return column; }
-	void set_Column(const int newColumn) { column = newColumn; }
+	int getColumn() { return column; }
+	void setColumn(const int newColumn) { column = newColumn; }
 
 	// Input & Output Function
 	void input(const int, const char);
 	void output(void);
 
+	// Other
 
 private:
 	int row, column;
 
 	vector< vector<Cell> > gameCell;
+	vector< vector<Cell> > gameCellTemp;
+
+	// Other
+	void expand();
+	void copy();
+
 
 
 

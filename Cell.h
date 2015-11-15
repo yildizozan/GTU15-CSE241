@@ -12,6 +12,7 @@ class Cell {
 public:
 	Cell();
 	Cell(const Cell& copyCell);
+	Cell(char);
 	Cell(int, char, char);
 
 	// Mutator & Accessor Functions
