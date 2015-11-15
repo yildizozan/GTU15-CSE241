@@ -11,13 +11,11 @@
 class Cell {
 public:
     Cell();
-    Cell(int);
-    Cell(int, int);
     
     private:
         int axisX;
-        int axisY;
-        int who;
+        char axisY;
+        char who;
 };
 
 #endif	/* CELL_H */
