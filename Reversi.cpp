@@ -12,7 +12,13 @@
 
 using namespace std;
 
-Reversi::Reversi() {
-    
+Reversi::Reversi()
+    :row(2), column(3)
+{
+    gameCell.resize(3);
+    for(int i=0; i < 1; i++)
+        gameCell[i].resize(1);
 }
+
+// Get functions
 
