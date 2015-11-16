@@ -15,13 +15,13 @@ public:
 	Cell();
 	Cell(const Cell& copyCell);
 	Cell(char);
-	Cell(int, char);
 	Cell(int, string, char);
 
 	// Mutator & Accessor Functions
 	int get_AxisX() const { return axisX; }
 	string get_AxisY() const { return axisY; }
 	char get_Who() const { return who; }
+	void setWho(const char newWho) { who = newWho; }
 
 
 private:

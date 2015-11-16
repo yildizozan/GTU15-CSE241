@@ -15,11 +15,8 @@ public:
 	Reversi();
 
 	// Mutator & Accessor
-	int getRow() { return row; }
-	void setRow(const int newRow) { row = newRow; }
-
-	int getColumn() { return column; }
-	void setColumn(const int newColumn) { column = newColumn; }
+	int getDim() { return dim; }
+	void setDim(const int newDim) { dim = newDim; }
 
 	int getWho() const { return who; }
 	void setWho(const int newWho) { who = newWho; }
@@ -38,9 +35,10 @@ public:
 	void output(void);
 
 	// Other
+	void score();
 
 private:
-	int row, column;	// Row and Column
+	int dim;	// Row and Column
 	int who;			// S?ran?n kimde oldu?unu tutuyor
 	int gameOver;		// It check game for game over!
 	int playerScore, AIScore;
@@ -50,9 +48,8 @@ private:
 
 	// Other
 	void expand();
-	void copy();
+	void refresh();
 	void find(const int, const string);
-	void score();
 
 
 

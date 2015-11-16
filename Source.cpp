@@ -1,6 +1,6 @@
 /*
 * File:   main.cpp
-* Author: ozan
+* Author: Ozan YILDIZ
 *
 * Created on November 12, 2015, 4:06 PM
 */
@@ -26,21 +26,26 @@ int main()
 		// Who is start game?
 		int who = game.getWho();
 
-		// Ekranda görmemizi sa?lar
+		// Scorlar
+		game.score();
+		cout << "AI: " << game.getAIScore() << " | ";
+		cout << "Player: " << game.getPlayerScore() << endl;;
+
+		// Ekranda görmemizi saglar
 		game.output();
 
-		// X koordinatini girmemizi sa?lar
+		// X koordinatini girmemizi saglar
 		cout << "\n";
 		cout << "Axis X: ";
 		int axisX;
 		cin >> axisX;
 
-		// Y koordinatini girmemizi sa?lar
+		// Y koordinatini girmemizi saglar
 		cout << "Axis Y: ";
 		string axisY = "x1";
 		cin >> axisY;
 
-		// Girilen de?erleri i?lers
+		// Girilen degerleri iletir
 		game.input(axisX, axisY);
 
 		// Ekran? temizleme
@@ -53,7 +58,6 @@ int main()
 	cout << "\n\n";
 
 
-	system("PAUSE");
 	return 0;
 }
 

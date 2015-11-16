@@ -30,11 +30,6 @@ Cell::Cell(char newWho)
 }
 
 
-Cell::Cell(int newAxisX, char newWho)
-	: axisX(newAxisX), who(newWho)
-{
-}
-
 Cell::Cell(int newAxisX, string newAxisY, char newWho)
 	: axisX(newAxisX), axisY(newAxisY), who(newWho)
 {
