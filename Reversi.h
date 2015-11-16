@@ -1,8 +1,8 @@
 /*
 * File:   Reversi.h
-* Author: ozan
+* Author: Ozan YILDIZ
 *
-* Created on November 12, 2015, 4:09 PM
+* Created on November 12, 2015, 4:06 PM
 */
 
 #ifndef REVERSI_H
@@ -39,7 +39,7 @@ public:
 
 private:
 	int dim;	// Row and Column
-	int who;			// S?ran?n kimde oldu?unu tutuyor
+	int who;			// Siranin kimde oldugunu tutuyor
 	int gameOver;		// It check game for game over!
 	int playerScore, AIScore;
 

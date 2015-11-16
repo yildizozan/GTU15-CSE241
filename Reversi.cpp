@@ -1,9 +1,10 @@
 /*
 * File:   Reversi.cpp
-* Author: ozan
+* Author: Ozan YILDIZ
 *
-* Created on November 12, 2015, 4:09 PM
+* Created on November 12, 2015, 4:06 PM
 */
+
 #include <vector>
 #include <iostream>
 #include <string>
@@ -14,8 +15,8 @@
 
 using namespace std;
 
-Reversi::Reversi()
-	: dim(2), gameOver(0), who(0), playerScore(0), AIScore(0) // ba?lang?ç de?erleri
+Reversi::Reversi() // Constructor
+	: dim(2), gameOver(0), who(0), playerScore(0), AIScore(0)
 {
 	gameCell.resize(getDim());
 	for (int i = 0; i < getDim(); i++)
@@ -64,7 +65,7 @@ void Reversi::output(void)
 }
 
 // Other
-void Reversi::score() // Her defas?nda puanlar ba?tan say?lacak
+void Reversi::score() // Her defas?nda puanlar bastan hesaplanacak
 {
 	int countPlayer = 0;
 	int countAI = 0;
@@ -109,14 +110,14 @@ void Reversi::expand()
 	for (int i = 0; i < getDim(); i++)
 		for (int j = 0; j < getDim(); j++)
 		{
-			string str = "x" + to_string(j + 1);		// Y koordinat?n? string ?eklinde olu?turur.
-			gameCell[i][j] = Cell(i + 1, str, 217);	// ?lgili hücreye gerekli bilgiler doldurur.
+			string str = "x" + to_string(j + 1);		// Y koordinatini string seklinde olusturur.
+			gameCell[i][j] = Cell(i + 1, str, 217);	// Ilgili hücreye gerekli bilgiler doldurur.
 		}
 
-	// Create new matrix and copy (burada önceki matrixi kullanmal?y?m o sebeple -2)
+	// Create new matrix and copy (burada önceki matrixi kullanmaliyim o sebeple -2)
 	for (int i = 0; i < getDim() - 2; i++)
 		for (int j = 0; j < getDim() - 2; j++)
-			gameCell[i + 1][j + 1].setWho(gameCellTemp[i][j].get_Who()); // Eski tasla?? büyümü? olan matrixe kopyalar
+			gameCell[i + 1][j + 1].setWho(gameCellTemp[i][j].get_Who()); // Eski taslari buyumus olan matrixe kopyalar
 }
 
 void Reversi::refresh()
@@ -127,13 +128,13 @@ void Reversi::refresh()
 	for (int i = 0; i < getDim(); i++)
 		for (int j = 0; j < getDim(); j++)
 		{
-			string str = "x" + to_string(j + 1);		// Y koordinat?n? string ?eklinde olu?turur.
+			string str = "x" + to_string(j + 1);		// Y koordinatini string seklinde olusturur.
 			gameCell[i][j] = Cell(i + 1, str, 217);	// ?lgili hücreye gerekli bilgiler doldurur.
 		}
 
-	// Create new matrix and copy (burada önceki matrixin boyutunu(dimension) kullanmal?y?m -2)
-	for (int i = 0; i < getDim() - 2; i++)
-		for (int j = 0; j < getDim() - 2; j++)
+	// Create new matrix and copy (burada önceki matrixin boyutunu(dimension) kullanmaliyim -2)
+	for (int i = 0; i < getDim(); i++)
+		for (int j = 0; j < getDim(); j++)
 			gameCell[i][j].setWho(gameCellTemp[i][j].get_Who()); // Eski tasla?? büyümü? olan matrixe kopyalar
 
 }
@@ -164,12 +165,12 @@ void Reversi::find(const int x, const string y)	// Uygun karakterde
 					if (1 == i + 1 || i + 1 == getDim() || 1 == j + 1 || j + 1 == getDim())	// E?er koordinatlar s?n?rda ise geni?letir.
 					{
 						expand();
-						gameCell[i + 1][j + 1] = Cell(z);	// ?lgili hücreye gerekli bilgiler doldurur.
+						gameCell[i + 1][j + 1].setWho(z);	// ?lgili hücreye gerekli bilgiler doldurur.
 					}
 					else
 					{
+						gameCell[i][j].setWho(z);	// ?lgili hücreye gerekli bilgiler doldurur.
 						refresh();
-						gameCell[i][j] = Cell(z);	// ?lgili hücreye gerekli bilgiler doldurur.
 					}
 				}
 			}

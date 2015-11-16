@@ -1,6 +1,6 @@
 /*
 * File:   Cell.h
-* Author: ozan
+* Author: Ozan YILDIZ
 *
 * Created on November 12, 2015, 4:06 PM
 */

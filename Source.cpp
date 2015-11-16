@@ -14,10 +14,7 @@
 
 using namespace std;
 
-/*
-*
-*/
-int main()
+int main(int argc, int** argv)
 {
 	Reversi game;
 
