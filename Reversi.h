@@ -36,6 +36,7 @@ public:
 
 	// Other
 	void score();
+	void newValue();
 
 private:
 	int dim;	// Row and Column
@@ -50,6 +51,7 @@ private:
 	void expand();
 	void refresh();
 	void find(const int, const string);
+	void control(const int, const string);
 
 
 

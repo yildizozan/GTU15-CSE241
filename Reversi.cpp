@@ -32,13 +32,15 @@ Reversi::Reversi() // Constructor
 }
 
 
-// Input & Output Functions
+/* INPUT & OUTPUT FUNCTIONS *************************/
+
+// Girilen degerleri hemen control() fonksiyonuna gonderir
 void Reversi::input(const int newAxisX, const string newAxisY)
 {
-	find(newAxisX, newAxisY);
+	control(newAxisX, newAxisY);
 }
 
-// Output function
+// Oyun alanini ekranda yazdirir.
 void Reversi::output(void)
 {
 	for (int i = 0; i < getDim() + 1; i++)
@@ -64,8 +66,10 @@ void Reversi::output(void)
 
 }
 
-// Other
-void Reversi::score() // Her defas?nda puanlar bastan hesaplanacak
+/* OTHER *******************************************/
+// Skor sayimi yapan fonksiyon
+// Oyun alani uzerindeki taslari sayar
+void Reversi::score() // Her defasinda puanlar bastan hesaplanacak
 {
 	int countPlayer = 0;
 	int countAI = 0;
@@ -89,7 +93,27 @@ void Reversi::score() // Her defas?nda puanlar bastan hesaplanacak
 	setAIScore(countAI - 2);
 }
 
-// Private Functions
+// Yeniden koordinat girilmesini saglar
+// Girilen koordinatlari control() fonksiyonuna gonderir
+// Recursive calisir
+void Reversi::newValue()
+{
+		// X koordinatini yine girmemizi saglar
+		cout << "\n";
+		cout << "Axis X again: ";
+		int axisX;
+		cin >> axisX;
+
+		// Y koordinatini yine girmemizi saglar
+		cout << "Axis Y again: ";
+		string axisY = "x1";
+		cin >> axisY;
+
+		control(axisX, axisY);
+}
+
+/* Private Functions ********************************/
+// Girilen koordinat ilk satir-sutun veya son satir-sutun ise oyun alan? genisler
 void Reversi::expand()
 {
 	gameCellTemp = gameCell;
@@ -120,6 +144,9 @@ void Reversi::expand()
 			gameCell[i + 1][j + 1].setWho(gameCellTemp[i][j].get_Who()); // Eski taslari buyumus olan matrixe kopyalar
 }
 
+// Matrix koordinatlarini tekrar duzenlerü
+// Uygun koordinatlar bulunurken belirlemis oldugum Cell objesinin icinde yer alan
+// axisX ve axisY degelerine bakarak bulur.
 void Reversi::refresh()
 {
 	gameCellTemp = gameCell;
@@ -139,7 +166,10 @@ void Reversi::refresh()
 
 }
 
-void Reversi::find(const int x, const string y)	// Uygun karakterde
+// who degiskeni oyun sirasinin kimde oldugunu belirler ona gore X veya O ekrana yazd?r?r.
+// Girilen koordinat bulunur, oyun alaninin genislemesi gerekiyorsa oyun alani genisler ve deger girilir,
+// Oyun alaninin genislemesine gerek yoksa deger girilir ve refresh() fonksiyonu ile koordinatlar tazelenir.
+void Reversi::find(const int x, const string y)
 {
 	char z;
 	if (getWho() == 0)
@@ -156,16 +186,16 @@ void Reversi::find(const int x, const string y)	// Uygun karakterde
 	}
 	for (int i = 0; i < getDim(); i++)
 	{
-		if (gameCell[i][0].get_AxisX() == x)	// Uygun sat?r? h?zl?ca buluyoruz
+		if (gameCell[i][0].get_AxisX() == x)	// Uygun satiri buluyoruz sutun icin simdilik gerek yok
 		{
-			for (int j = 0; j < getDim(); j++)
+			for (int j = 0; j < getDim(); j++)	
 			{
-				if (gameCell[i][j].get_AxisY() == y) // Uygun sat?rdaki sütunu buluyoruz
+				if (gameCell[i][j].get_AxisY() == y) // Bulmus oldugumuz satirdaki sutunu buluyoruz
 				{
-					if (1 == i + 1 || i + 1 == getDim() || 1 == j + 1 || j + 1 == getDim())	// E?er koordinatlar s?n?rda ise geni?letir.
+					if (1 == i + 1 || i + 1 == getDim() || 1 == j + 1 || j + 1 == getDim())	// Eger koordinatlar sinirda ise oyun alani genisler
 					{
 						expand();
-						gameCell[i + 1][j + 1].setWho(z);	// ?lgili hücreye gerekli bilgiler doldurur.
+						gameCell[i + 1][j + 1].setWho(z);	// Ilgili hücreye gerekli bilgiler doldurur.
 					}
 					else
 					{
@@ -179,4 +209,36 @@ void Reversi::find(const int x, const string y)	// Uygun karakterde
 
 }
 
+// Girilen koordinatlar daha onceden girilmis mi?
+// Hamle yapmaya musait mi onu kontrol edecek.
+// Eger musait ise true dondurecek
+void Reversi::control(const int axisX, const string axisY)
+{
+	int row, column;
+	for (int i = 0; i < dim; i++)
+	{
+		for (int j = 0; j < dim; j++)
+		{
+			if (gameCell[i][j].get_AxisX() == axisX && gameCell[i][j].get_AxisY() == axisY)
+			{
+				row = i;
+				column = j;
+				goto bypass;	// donguler daha sonraki karakterleri arast?rmas?na gerek yok.
+			}
+		}
+	}
+
+	bypass:
+
+	// ayr? ayr? yapmak yerine de?i?kene atay?p kontrol etmek daha dogru gibi
+	char control = gameCell[row][column].get_Who(); 
+	if (control == 'X' || control == 'O')
+	{
+		newValue();
+	}
+	else
+	{
+		find(axisX, axisY);
+	}
+}
 

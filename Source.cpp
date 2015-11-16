@@ -23,7 +23,7 @@ int main(int argc, int** argv)
 		// Who is start game?
 		int who = game.getWho();
 
-		// Scorlar
+		// Skorlar
 		game.score();
 		cout << "AI: " << game.getAIScore() << " | ";
 		cout << "Player: " << game.getPlayerScore() << endl;;
@@ -45,7 +45,7 @@ int main(int argc, int** argv)
 		// Girilen degerleri iletir
 		game.input(axisX, axisY);
 
-		// Ekran? temizleme
+		// Ekrani temizleme
 		system("CLS");
 
 		// S?ran?n kimde oldu?unu belirleme
