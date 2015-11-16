@@ -23,12 +23,6 @@ Cell::Cell(const Cell& copyCell)
 	who = copyCell.who;
 }
 
-Cell::Cell(string newAxisY)
-	: axisY(newAxisY)
-{
-
-}
-
 Cell::Cell(char newWho)
 	: who(newWho)
 {

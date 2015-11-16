@@ -21,14 +21,29 @@ public:
 	int getColumn() { return column; }
 	void setColumn(const int newColumn) { column = newColumn; }
 
+	int getWho() const { return who; }
+	void setWho(const int newWho) { who = newWho; }
+
+	int getGameOver() const { return gameOver; }
+	void setGameOver(const int newGameOver) { who = newGameOver; }
+
+	int getPlayerScore() const { return playerScore; }
+	void setPlayerScore(const int newPlayerScore) { playerScore = newPlayerScore; }
+
+	int getAIScore() const { return AIScore; }
+	void setAIScore(const int newAIScore) { AIScore = newAIScore; }
+
 	// Input & Output Function
-	void input(const int, const char);
+	void input(int, string);
 	void output(void);
 
 	// Other
 
 private:
-	int row, column;
+	int row, column;	// Row and Column
+	int who;			// S?ran?n kimde oldu?unu tutuyor
+	int gameOver;		// It check game for game over!
+	int playerScore, AIScore;
 
 	vector< vector<Cell> > gameCell;
 	vector< vector<Cell> > gameCellTemp;
@@ -36,6 +51,8 @@ private:
 	// Other
 	void expand();
 	void copy();
+	void find(const int, const string);
+	void score();
 
 
 

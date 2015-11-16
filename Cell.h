@@ -14,7 +14,6 @@ class Cell {
 public:
 	Cell();
 	Cell(const Cell& copyCell);
-	Cell(string);
 	Cell(char);
 	Cell(int, char);
 	Cell(int, string, char);
