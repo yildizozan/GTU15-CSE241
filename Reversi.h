@@ -15,8 +15,11 @@ public:
 	Reversi();
 
 	// Mutator & Accessor
-	int getDim() { return dim; }
-	void setDim(const int newDim) { dim = newDim; }
+	int getRow() { return row; }
+	void setRow(const int newRow) { row = newRow; }
+
+	int getColumn() { return column; }
+	void setColumn(const int newColumn) { column = newColumn; }
 
 	int getWho() const { return who; }
 	void setWho(const int newWho) { who = newWho; }
@@ -34,12 +37,17 @@ public:
 	void input(int, string);
 	void output(void);
 
+	// Play game functions
+	void playComputer();
+	void playPlayer(const int, const string);
+
 	// Other
 	void score();
 	void newValue();
 
+
 private:
-	int dim;	// Row and Column
+	int row, column;	// Row and Column
 	int who;			// Siranin kimde oldugunu tutuyor
 	int gameOver;		// It check game for game over!
 	int playerScore, AIScore;

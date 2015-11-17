@@ -8,6 +8,8 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <stdlib.h>
+#include <ctime>
 
 #include "Cell.h"
 #include "Reversi.h"
@@ -16,11 +18,11 @@
 using namespace std;
 
 Reversi::Reversi() // Constructor
-	: dim(2), gameOver(0), who(0), playerScore(0), AIScore(0)
+	: row(2), column(2), gameOver(0), who(0), playerScore(0), AIScore(0)
 {
-	gameCell.resize(getDim());
-	for (int i = 0; i < getDim(); i++)
-		gameCell[i].resize(getDim());
+	gameCell.resize(getRow());
+	for (int i = 0; i < getRow(); i++)
+		gameCell[i].resize(getColumn());
 
 	expand();
 
@@ -35,21 +37,17 @@ Reversi::Reversi() // Constructor
 /* INPUT & OUTPUT FUNCTIONS *************************/
 
 // Girilen degerleri hemen control() fonksiyonuna gonderir
-void Reversi::input(const int newAxisX, const string newAxisY)
-{
-	control(newAxisX, newAxisY);
-}
 
 // Oyun alanini ekranda yazdirir.
 void Reversi::output(void)
 {
-	for (int i = 0; i < getDim() + 1; i++)
+	for (int i = 0; i < getRow() + 1; i++)
 	{
-		if (i < getDim())
+		if (i < getRow())
 		{
 			cout << i + 1 << "\t";
 
-			for (int j = 0; j < getDim(); j++)
+			for (int j = 0; j < getColumn(); j++)
 				cout << " " << gameCell[i][j].get_Who() << " ";
 			cout << "\n";
 		}
@@ -57,13 +55,49 @@ void Reversi::output(void)
 		{
 			cout << "\t";
 
-			for (int k = 0; k < getDim(); k++)
+			for (int k = 0; k < getColumn(); k++)
 			{
 				cout << "x" << k+1 << " ";
 			}
 		}
 	}
 
+}
+
+void Reversi::playComputer()
+{
+	// Rastgele degerler olusturuyoruz koordinatlar icin
+	srand(time(NULL));
+	int borderX = 1 + (rand() % getRow());
+	int borderY = 1 + (rand() % getColumn());
+
+	// Programin yap?s?ndan dolay? sutun islemleri icin x cinsinden string olarak yazmak gerekiyor
+	string borderY_str = "x" + to_string(borderY);
+
+	// Rakip oyuncunun taslarinin bulundugu koordinatlari yeni vektore atiyoruz
+	// Boylece oyun alaninda bos olan yerleri taramamis oluruz
+	vector <Cell> opponentCoord;
+
+	// Bulundugu hucrenin tum yonlerini hesaplayacak
+	for (int i = 0; i < getRow(); i++)
+	{
+		for (int j = 0; j < getColumn(); j++)
+		{
+			if (gameCell[i][j].get_Who() == 'O')
+			{
+				opponentCoord.push_back(gameCell[i][j]);
+			}
+		}
+	}
+
+	// Olusan degerleri control icin yolluyoruz
+	//control(borderX, borderY_str);
+
+}
+
+void Reversi::playPlayer(const int newAxisX, const string newAxisY)
+{
+	control(newAxisX, newAxisY);
 }
 
 /* OTHER *******************************************/
@@ -74,9 +108,9 @@ void Reversi::score() // Her defasinda puanlar bastan hesaplanacak
 	int countPlayer = 0;
 	int countAI = 0;
 
-	for (int i = 0; i < getDim(); i++)
+	for (int i = 0; i < getRow(); i++)
 	{
-		for (int j = 0; j < getDim(); j++)
+		for (int j = 0; j < getColumn(); j++)
 		{
 			if (gameCell[i][j].get_Who() == 'O')
 			{
@@ -120,27 +154,29 @@ void Reversi::expand()
 
 
 	// New row value
-	int temp = getDim();
-	setDim(temp + 2);
+	setRow(getRow() + 2);
+
+	// New column value
+	setColumn(getColumn() + 2);
 
 	// Row expand for gameCell
-	gameCell.resize(getDim());
+	gameCell.resize(getRow());
 
 	// Column expand for gameCell
 	for (int i = 0; i < gameCell.size(); i++)
-		gameCell[i].resize(getDim());
+		gameCell[i].resize(getColumn());
 
 	// All member of vector should be zero
-	for (int i = 0; i < getDim(); i++)
-		for (int j = 0; j < getDim(); j++)
+	for (int i = 0; i < getRow(); i++)
+		for (int j = 0; j < getColumn(); j++)
 		{
 			string str = "x" + to_string(j + 1);		// Y koordinatini string seklinde olusturur.
-			gameCell[i][j] = Cell(i + 1, str, 217);	// Ilgili hücreye gerekli bilgiler doldurur.
+			gameCell[i][j] = Cell(i + 1, str, NULL);	// Ilgili hücreye gerekli bilgiler doldurur.
 		}
 
 	// Create new matrix and copy (burada önceki matrixi kullanmaliyim o sebeple -2)
-	for (int i = 0; i < getDim() - 2; i++)
-		for (int j = 0; j < getDim() - 2; j++)
+	for (int i = 0; i < getRow() - 2; i++)
+		for (int j = 0; j < getColumn() - 2; j++)
 			gameCell[i + 1][j + 1].setWho(gameCellTemp[i][j].get_Who()); // Eski taslari buyumus olan matrixe kopyalar
 }
 
@@ -152,16 +188,16 @@ void Reversi::refresh()
 	gameCellTemp = gameCell;
 
 	// All member of vector should be zero
-	for (int i = 0; i < getDim(); i++)
-		for (int j = 0; j < getDim(); j++)
+	for (int i = 0; i < getRow(); i++)
+		for (int j = 0; j < getColumn(); j++)
 		{
 			string str = "x" + to_string(j + 1);		// Y koordinatini string seklinde olusturur.
-			gameCell[i][j] = Cell(i + 1, str, 217);	// ?lgili hücreye gerekli bilgiler doldurur.
+			gameCell[i][j] = Cell(i + 1, str, NULL);	// ?lgili hücreye gerekli bilgiler doldurur.
 		}
 
 	// Create new matrix and copy (burada önceki matrixin boyutunu(dimension) kullanmaliyim -2)
-	for (int i = 0; i < getDim(); i++)
-		for (int j = 0; j < getDim(); j++)
+	for (int i = 0; i < getRow(); i++)
+		for (int j = 0; j < getColumn(); j++)
 			gameCell[i][j].setWho(gameCellTemp[i][j].get_Who()); // Eski tasla?? büyümü? olan matrixe kopyalar
 
 }
@@ -174,32 +210,32 @@ void Reversi::find(const int x, const string y)
 	char z;
 	if (getWho() == 0)
 	{
-		z = 'X';
+		z = 'O';
 	}
 	else if (getWho() == 1)
 	{
-		z = 'O';
+		z = 'X';
 	}
 	else
 	{
 		z = '-';
 	}
-	for (int i = 0; i < getDim(); i++)
+	for (int i = 0; i < getRow(); i++)
 	{
 		if (gameCell[i][0].get_AxisX() == x)	// Uygun satiri buluyoruz sutun icin simdilik gerek yok
 		{
-			for (int j = 0; j < getDim(); j++)	
+			for (int j = 0; j < getRow(); j++)	
 			{
 				if (gameCell[i][j].get_AxisY() == y) // Bulmus oldugumuz satirdaki sutunu buluyoruz
 				{
-					if (1 == i + 1 || i + 1 == getDim() || 1 == j + 1 || j + 1 == getDim())	// Eger koordinatlar sinirda ise oyun alani genisler
+					if (1 == i + 1 || i + 1 == getRow() || 1 == j + 1 || j + 1 == getColumn())	// Eger koordinatlar sinirda ise oyun alani genisler ve deger atanir
 					{
 						expand();
-						gameCell[i + 1][j + 1].setWho(z);	// Ilgili hücreye gerekli bilgiler doldurur.
+						gameCell[i + 1][j + 1].setWho(z);
 					}
-					else
+					else	// Deger atanir ve koordinatlar tazelenir.
 					{
-						gameCell[i][j].setWho(z);	// ?lgili hücreye gerekli bilgiler doldurur.
+						gameCell[i][j].setWho(z);
 						refresh();
 					}
 				}
@@ -214,15 +250,15 @@ void Reversi::find(const int x, const string y)
 // Eger musait ise true dondurecek
 void Reversi::control(const int axisX, const string axisY)
 {
-	int row, column;
-	for (int i = 0; i < dim; i++)
+	int rowTemp, columnTemp;
+	for (int i = 0; i < getRow(); i++)
 	{
-		for (int j = 0; j < dim; j++)
+		for (int j = 0; j < getColumn(); j++)
 		{
 			if (gameCell[i][j].get_AxisX() == axisX && gameCell[i][j].get_AxisY() == axisY)
 			{
-				row = i;
-				column = j;
+				rowTemp = i;
+				columnTemp = j;
 				goto bypass;	// donguler daha sonraki karakterleri arast?rmas?na gerek yok.
 			}
 		}
@@ -230,11 +266,19 @@ void Reversi::control(const int axisX, const string axisY)
 
 	bypass:
 
-	// ayr? ayr? yapmak yerine de?i?kene atay?p kontrol etmek daha dogru gibi
-	char control = gameCell[row][column].get_Who(); 
+	// Vector elemaninda herhangi bir deger girilmis mi onu kontrol ediyor.
+	// Ayr? ayr? yapmak yerine de?i?kene atay?p kontrol etmek daha dogru gibi, 1 islem daha az yap?yor.
+	char control = gameCell[rowTemp][columnTemp].get_Who();
 	if (control == 'X' || control == 'O')
 	{
-		newValue();
+		if (getWho() == 0)	// Oyuncunun hamlesi demektir
+		{
+			newValue();
+		}
+		else	// PC'nin hamlesi
+		{
+			playComputer();
+		}
 	}
 	else
 	{

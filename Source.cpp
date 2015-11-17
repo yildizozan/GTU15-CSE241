@@ -31,19 +31,24 @@ int main(int argc, int** argv)
 		// Ekranda görmemizi saglar
 		game.output();
 
-		// X koordinatini girmemizi saglar
-		cout << "\n";
-		cout << "Axis X: ";
-		int axisX;
-		cin >> axisX;
+		if (who == 0) // Oyuncu oynayacak demektir.
+		{
+			// X koordinatini girmemizi saglar
+			cout << "\n";
+			cout << "Axis X: ";
+			int axisX;
+			cin >> axisX;
 
-		// Y koordinatini girmemizi saglar
-		cout << "Axis Y: ";
-		string axisY = "x1";
-		cin >> axisY;
-
-		// Girilen degerleri iletir
-		game.input(axisX, axisY);
+			// Y koordinatini girmemizi saglar
+			cout << "Axis Y: ";
+			string axisY = "x1";
+			cin >> axisY;
+			game.playPlayer(axisX, axisY);
+		}
+		else
+		{
+			game.playComputer();
+		}
 
 		// Ekrani temizleme
 		system("CLS");
