@@ -35,3 +35,13 @@ Cell::Cell(int newAxisX, string newAxisY, char newWho)
 {
 
 }
+
+bool Cell::operator==(const Cell & temp)
+{
+	if (axisX == temp.axisX)
+		if (axisY == temp.axisY)
+			return true;
+
+	return false;
+}
+

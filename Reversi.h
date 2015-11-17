@@ -45,6 +45,7 @@ public:
 	void score();
 	void newValue();
 
+	// Operator Overloading
 
 private:
 	int row, column;	// Row and Column

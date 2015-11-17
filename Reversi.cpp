@@ -34,10 +34,13 @@ Reversi::Reversi() // Constructor
 }
 
 
-/* INPUT & OUTPUT FUNCTIONS *************************/
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//
+// Input & Output Functions
+//
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 // Girilen degerleri hemen control() fonksiyonuna gonderir
-
 // Oyun alanini ekranda yazdirir.
 void Reversi::output(void)
 {
@@ -45,7 +48,7 @@ void Reversi::output(void)
 	{
 		if (i < getRow())
 		{
-			cout << i + 1 << "\t";
+			cout << i + 1 << "\t|";
 
 			for (int j = 0; j < getColumn(); j++)
 				cout << " " << gameCell[i][j].get_Who() << " ";
@@ -71,14 +74,15 @@ void Reversi::playComputer()
 	int borderX = 1 + (rand() % getRow());
 	int borderY = 1 + (rand() % getColumn());
 
-	// Programin yap?s?ndan dolay? sutun islemleri icin x cinsinden string olarak yazmak gerekiyor
+	// Programin yapisindan dolayi sutun islemleri icin x cinsinden string olarak yazmak gerekiyor
 	string borderY_str = "x" + to_string(borderY);
 
 	// Rakip oyuncunun taslarinin bulundugu koordinatlari yeni vektore atiyoruz
 	// Boylece oyun alaninda bos olan yerleri taramamis oluruz
 	vector <Cell> opponentCoord;
 
-	// Bulundugu hucrenin tum yonlerini hesaplayacak
+	// Rakip oyuncunun taslarinin nerede oldu?unu ogrencek
+	// Ogrendigi bu bilgileri baska bir vektorde biriktirecek
 	for (int i = 0; i < getRow(); i++)
 	{
 		for (int j = 0; j < getColumn(); j++)
@@ -90,6 +94,21 @@ void Reversi::playComputer()
 		}
 	}
 
+	bool ok = false;
+	int count = 0;
+	while (ok)
+	{
+		for (int i = 0; i < getRow(); i++)
+		{
+			for (int j = 0; j < getColumn(); j++)
+			{
+				if (gameCell[i][j] == opponentCoord[count])
+				{
+					count++;
+				}
+			}
+		}
+	}
 	// Olusan degerleri control icin yolluyoruz
 	//control(borderX, borderY_str);
 
@@ -100,7 +119,12 @@ void Reversi::playPlayer(const int newAxisX, const string newAxisY)
 	control(newAxisX, newAxisY);
 }
 
-/* OTHER *******************************************/
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//
+// Other Functions
+//
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 // Skor sayimi yapan fonksiyon
 // Oyun alani uzerindeki taslari sayar
 void Reversi::score() // Her defasinda puanlar bastan hesaplanacak
@@ -146,7 +170,21 @@ void Reversi::newValue()
 		control(axisX, axisY);
 }
 
-/* Private Functions ********************************/
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//
+// Operator Overloading Functions
+//
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//
+// Private Functions
+//
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
 // Girilen koordinat ilk satir-sutun veya son satir-sutun ise oyun alan? genisler
 void Reversi::expand()
 {
