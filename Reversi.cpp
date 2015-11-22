@@ -317,7 +317,7 @@ void Reversi::refresh()
 	for (int i = 0; i < getRow(); i++)
 		for (int j = 0; j < getColumn(); j++)
 			gameCell[i][j].setWho(gameCellTemp[i][j].get_Who()); // Eski tasla?? büyümü? olan matrixe kopyalar
-
+	
 }
 
 // who degiskeni oyun sirasinin kimde oldugunu belirler ona gore X veya O ekrana yazd?r?r.
@@ -338,6 +338,8 @@ void Reversi::adding(const int x, const string y)
 	{
 		z = '-';
 	}
+
+
 	for (int i = 0; i < getRow(); i++)
 	{
 		if (gameCell[i][0].get_AxisX() == x)	// Uygun satiri buluyoruz sutun icin simdilik gerek yok
@@ -348,6 +350,7 @@ void Reversi::adding(const int x, const string y)
 				{
 					gameCell[i][j].setWho(z);
 					refresh();
+					calculate(i, j, z);
 				}
 			}	// end for j
 		}
@@ -504,20 +507,223 @@ void Reversi::control(const int axisX, const string axisY)
 	}
 }
 
-int Reversi::find(const Cell current, const Cell orj)
+void Reversi::calculate(const int x, const int y, const char whois)
 {
-	int count = 0;
 
 	vector< vector<Cell> > gameCellTemp;
 	gameCellTemp = gameCell;
 
-	for (int i = 0; i < getRow(); i++)
+
+	int count = 0;;
+	int i = x,
+		j = y,
+		orginal_i,
+		orginal_j;
+
+	/*	Yönler
+		1-----2-----3
+		|			|
+		4			5
+		|			|
+		6-----7-----8
+	*/
+
+	orginal_i = i;
+	orginal_j = j;
+
+
+	//	1 yonunde
+	while (gameCellTemp[i - 1][j - 1].get_Who() != whois && gameCellTemp[i - 1][j - 1].get_Who() != NULL)
 	{
-		for (int j = 0; j < getColumn(); j++)
+		--i;
+		--j;
+		count++;
+	}
+	if (0 < count)
+	{
+		i = orginal_i;
+		j = orginal_j;
+		int movement = 0;
+		while (movement <= count)
 		{
+			i--;
+			j--;
+			gameCellTemp[i][j] = whois;
+			movement++;
 		}
 	}
 
-	return count;
+	//	2 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i - 1][j].get_Who() != whois && gameCellTemp[i - 1][j].get_Who() != NULL)
+	{
+		--i;
+		count++;
+	}
+	if (0 < count)
+	{
+		i = orginal_i;
+		int movement = 0;
+		while (movement <= count)
+		{
+			i--;
+			j--;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}
+	}
+
+	//	3 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i - 1][j + 1].get_Who() != whois && gameCellTemp[i - 1][j + 1].get_Who() != NULL)
+	{
+		--i;
+		++j;
+		count++;
+	}	// end loop while
+	if (0 < count)
+	{
+		i = orginal_i;
+		j = orginal_j;
+		int movement = 0;
+		while (movement <= count)
+		{
+			i--;
+			j++;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}	// end loop while()
+	}	// end if
+
+
+	//	4 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i][j-1].get_Who() != whois && gameCellTemp[i - 1][j].get_Who() != NULL)
+	{
+		--j;
+		count++;
+	}
+
+	if (0 < count)
+	{
+		j = orginal_j;		// Degeri tazeliyoruz
+		int movement = 0;	// Kac defa davranacagi
+		while (movement <= count)
+		{
+			j--;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}	// end loop while()
+	}
+
+	//	5 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i][j + 1].get_Who() != whois && gameCellTemp[i][j + 1].get_Who() != NULL)
+	{
+		++j;
+		count++;
+	}	// end loop while
+
+	if (0 < count)
+	{
+		j = orginal_j;
+		int movement = 0;
+		while (movement <= count)
+		{
+			j++;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}	// end loop while
+	}	// end if - count
+
+	// 6 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i+1][j - 1].get_Who() != whois && gameCellTemp[i + 1][j - 1].get_Who() != NULL)
+	{
+		++i;
+		--j;
+		count;
+	}	// endl loop while
+
+	if (0 < count)
+	{
+		i = orginal_i;
+		j = orginal_j;
+		int movement = 0;
+		while (movement <= count)
+		{
+			i++;
+			j--;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}	// endl loop while
+	}	// end if - count
+
+	// 7 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i + 1][j].get_Who() != whois && gameCellTemp[i + 1][j].get_Who() != NULL)
+	{
+		++i;
+		count++;
+	}	// end loop while
+	if (0 < count)
+	{
+		i = orginal_i;
+		int movement = 0;
+		while (movement <= count)
+		{
+			i++;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}	// end loop while
+	}	// end if - count
+	 
+	// 8 yonunde
+	count = 0;
+	i = orginal_i;
+	j = orginal_j;
+	while (gameCellTemp[i + 1][j + 1].get_Who() != whois && gameCellTemp[i + 1][j + 1].get_Who() != NULL)
+	{
+		++i;
+		++j;
+		count++;
+	}	// end loop while
+
+	if (0 < count)
+	{
+		i = orginal_i;
+		j = orginal_j;
+		int movement = 0;
+		while (movement <= count)
+		{
+			i++;
+			j++;
+			gameCellTemp[i][j] = whois;
+			movement++;
+		}	// end loop while
+	}	// end if - count
+
+
+
+
+
+
+
+	// Hesaplanmis icerigi tekrar geri kopyal?yoruz
+	gameCell = gameCellTemp;
+
+	return;
 }
 

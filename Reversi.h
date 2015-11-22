@@ -61,7 +61,7 @@ private:
 	void refresh();
 	void adding(const int, const string);
 	void control(const int, const string);
-	int find(const Cell, const Cell);
+	void calculate(const int, const int, const char);
 	
 };
 
