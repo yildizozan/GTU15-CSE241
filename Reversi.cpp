@@ -90,102 +90,86 @@ void Reversi::output(void)
 
 void Reversi::play()
 {
-	// Rastgele degerler olusturuyoruz koordinatlar icin
-	srand(time(NULL));
-	int borderX = 1 + (rand() % getRow());
-	int borderY = 1 + (rand() % getColumn());
+	vector<vector<Cell> > gameCellTemp;
+	gameCellTemp = gameCell;
 
-	// Programin yapisindan dolayi sutun islemleri icin x cinsinden string olarak yazmak gerekiyor
-	string borderY_str = "x" + to_string(borderY);
+	vector <Cell> AIBest;
+	vector<int> AIBScore;
 
-	// Rakip oyuncunun taslarinin bulundugu koordinatlari yeni vektore atiyoruz
-	// Boylece oyun alaninda bos olan yerleri taramamis oluruz
-	vector <Cell> myCoord;
-	vector <Cell> opponentCoord;
-	vector <Cell> opponentCoordNULL;
+	char whois = 'X';
 
-	// AI taslarinin koordinatlarini belirliyorum
-	for (int i = 0; i < getRow(); i++)
+	for (int i = 0; i < getRow() - 1; i++)
 	{
 		for (int j = 0; j < getColumn(); j++)
 		{
-			if (gameCell[i][j].get_Who() == 'X')
+			if (gameCellTemp[i][j].get_Who() == 'O')
 			{
-				myCoord.push_back(gameCell[i][j]);
-			}
-		}
-	}
-
-	// Rakip oyuncunun taslarinin nerede oldugunu ogreniyorum
-	// Ogrendigim bu bilgileri baska bir vektorde biriktirecek
-	for (int i = 0; i < getRow(); i++)
-	{
-		for (int j = 0; j < getColumn(); j++)
-		{
-			if (gameCell[i][j].get_Who() == 'O')
-			{
-				opponentCoord.push_back(gameCell[i][j]);
-			}
-		}
-	}
-
-
-	int a[1000],
-		count = 0;
-	// Oyununcunun taslarinin etrafindaki bos alanlar teker teker secilip kac tasi yok ettigi ogrenilecek
-	for (int k = 0; k < opponentCoord.size(); k++)
-	{
-		for (int i = 1; i < getRow(); i++)
-		{
-			for (int j = 1; j < getColumn(); j++)
-			{
-				if (opponentCoord[k].get_Who() == gameCell[i][j].get_Who())
+				// Sol ust capraz
+				if (gameCell[i - 1][j - 1].get_Who() == NULL)
 				{
-					// Sol ust carpraz bos
-					if (gameCell[i - 1][j - 1].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i - 1][j - 1]);
-					}
-					// Ust
-					if (gameCell[i - 1][j].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i - 1][j]);
-					}
-					// Sag ust capraz
-					if (gameCell[i - 1][j + 1].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i - 1][j + 1]);
-					}
-					// Sol
-					if (gameCell[i][j - 1].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i][j - 1]);
-					}
-					// Sag
-					if (gameCell[i][j + 1].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i][j + 1]);
-					}
-					// Sol alt capraz
-					if (gameCell[i + 1][j - 1].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i + 1][j - 1]);
-					}
-					// Alt
-					if (gameCell[i + 1][j].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i + 1][j]);
-					}
-					// Sag alt capraz
-					if (gameCell[i + 1][j + 1].get_Who() == NULL)
-					{
-						opponentCoordNULL.push_back(gameCell[i + 1][j + 1]);
-					}
-				} // if compare two Cell
-			} // end for j
-		} // end for i
-	} // end for k
+					AIBest.push_back(gameCell[i - 1][j - 1]);
+					AIBScore.push_back(findBestPosition(i - 1, j - 1));
+				}
+				// Ust
+				if (gameCell[i - 1][j].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i - 1][j]);
+					AIBScore.push_back(findBestPosition(i - 1, j));
+				}
+				// Sag ust capraz
+				if (gameCell[i - 1][j + 1].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i - 1][j + 1]);
+					AIBScore.push_back(findBestPosition(i - 1, j + 1));
+				}
+				// Sol
+				if (gameCell[i][j - 1].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i][j - 1]);
+					AIBScore.push_back(findBestPosition(i, j - 1));
+				}
+				// Sag
+				if (gameCell[i][j + 1].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i][j + 1]);
+					AIBScore.push_back(findBestPosition(i, j + 1));
+				}
+				// Sol alt capraz
+				if (gameCell[i + 1][j - 1].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i + 1][j - 1]);
+					AIBScore.push_back(findBestPosition(i + 1, j - 1));
+				}
+				// Alt
+				if (gameCell[i + 1][j].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i + 1][j]);
+					AIBScore.push_back(findBestPosition(i + 1, j));
+				}
+				// Sag alt capraz
+				if (gameCell[i + 1][j + 1].get_Who() == NULL)
+				{
+					AIBest.push_back(gameCell[i + 1][j + 1]);
+					AIBScore.push_back(findBestPosition(i + 1, j + 1));
+				}
+			}	// end if
+		}	// end loop for j
+	}	// end loop for i
 
+	// Her hamleyi hesapladik ve en guclu hamleyi AIBScore vektorden yola cikarak bulacagiz
+	int max = AIBScore[0];
+	int	power = 0;
+	for (int i = 0; i < AIBScore.size(); i++)
+		if (max < AIBScore[i])
+		{
+			max = AIBScore[i];
+			power = i;
+		}
+
+	// The power!
+	// En guclu hamle..
+
+	control(AIBest[power].get_AxisX(), AIBest[power].get_AxisY());
 
 } // end play() function
 
@@ -387,14 +371,16 @@ void Reversi::control(const int axisX, const string axisY)
 	// Kenarlardaki junk degerleri sorgulamasin diye oraya tasmiyoruz
 	// Sorgulama sekli bir tane bos kare secilecek ve etrafindaki komsu hucreler sorgulanacak
 
-	/*	Matrix yapi sistemi(junk degerleri sorgulamamiz gerek calisma seklimize aykiri! :) )
-		A--------------B
-		|              |
-		|              |
-		|              |
-		|              |
+	/************************************************************************************
+
+		A--------------B	// Matrix yapi sistemi
+		|              |	// Eger secilen hucre kose veya kenarlarda ise bunlarin etrafindaki hucrelerin bos olmamasi gerekli
+		|              |	// Eger bos ise tekrar secim yapmak zorunda
+		|              |	// Veyahut ortalarda bir hucre secilmis ise etrafindaki hucreler yine bos olmamali
+		|              |	// En az bir tanesi dolu olmali
 		C--------------D
-	*/
+
+	************************************************************************************/
 
 
 	// A kosesi kontrol ediyoruz
@@ -513,20 +499,21 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	vector< vector<Cell> > gameCellTemp;
 	gameCellTemp = gameCell;
 
-
 	int count = 0;;
 	int i = x,
 		j = y,
 		orginal_i,
 		orginal_j;
 
-	/*	Yönler
-		1-----2-----3
-		|			|
-		4			5
-		|			|
-		6-----7-----8
-	*/
+	/*****************************************************************************************
+	
+			1-----2-----3	// Merkeze oynanacak tas geliyor sekilde kalibi yerlestiriyoruz
+			|			|	// sirayla sayilardan birinin yonunde sirayla gitmeye basliyoruz
+	Yönler	4			5	// taki kendi tasimiza denk gelene kadar
+			|			|	// eger kendi tasimiza denk gelmez isek o islem yapilmiyor
+			6-----7-----8	// ve diger taraflara bakiyoruz
+
+	*****************************************************************************************/
 
 	orginal_i = i;
 	orginal_j = j;
@@ -540,7 +527,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		count++;
 		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
 			count = 0;
-	}
+	}	// end loop while()
+
 	if (0 < count)
 	{
 		i = orginal_i;
@@ -550,7 +538,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		{
 			i--;
 			j--;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}
 	}
@@ -565,7 +553,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		count++;
 		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
 			count = 0;
-	}
+	}	// end loop while()
+
 	if (0 < count)
 	{
 		i = orginal_i;
@@ -574,7 +563,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		{
 			i--;
 			j--;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}
 	}
@@ -590,7 +579,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		count++;
 		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
 			count = 0;
-	}	// end loop while
+	}	// end loop while()
+
 	if (0 < count)
 	{
 		i = orginal_i;
@@ -600,7 +590,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		{
 			i--;
 			j++;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}	// end loop while()
 	}	// end if
@@ -616,7 +606,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		count++;
 		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
 			count = 0;
-	}
+	}	// end loop while()
 
 	if (0 < count)
 	{
@@ -625,7 +615,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		while (movement <= count)
 		{
 			j--;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}	// end loop while()
 	}
@@ -649,7 +639,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		while (movement <= count)
 		{
 			j++;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}	// end loop while
 	}	// end if - count
@@ -676,7 +666,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		{
 			i++;
 			j--;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}	// endl loop while
 	}	// end if - count
@@ -692,6 +682,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
 			count = 0;
 	}	// end loop while
+
 	if (0 < count)
 	{
 		i = orginal_i;
@@ -699,7 +690,7 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		while (movement <= count)
 		{
 			i++;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}	// end loop while
 	}	// end if - count
@@ -726,14 +717,165 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		{
 			i++;
 			j++;
-			gameCellTemp[i][j] = whois;
+			gameCellTemp[i][j].setWho(whois);
 			movement++;
 		}	// end loop while
 	}	// end if - count
 
-	// Hesaplanmis icerigi tekrar geri kopyal?yoruz
+	// Hesaplanmis icerigi tekrar geri kopyaliyoruz
 	gameCell = gameCellTemp;
 
 	return;
 }
 
+// AI yapacagi en iyi hamleyi bulmak icin kullanacak
+const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const olmamali
+{
+	vector<vector<Cell> > gameCellTemp;
+	gameCellTemp = gameCell;
+
+	int temp_i, temp_j;
+	int count = 0;
+	int AIBTotalScore = 0;
+
+	temp_i = i;
+	temp_j = j;
+
+	// 1 yonu
+	if (i < getRow() - 1 && j < getColumn() - 1 && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i - 1][j - 1].get_Who() == 'O')
+		{
+			i--;
+			j--;
+			count++;
+		}	// end loop while
+	}	// end if
+	if (gameCellTemp[i - 1][j - 1].get_Who() == NULL)
+		count = 0;
+
+	AIBTotalScore += count;
+
+	// 2 yonu
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (i < getRow() - 1 && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i - 1][j].get_Who() == 'O')
+		{
+			i++;
+			count++;
+		}	// end loop while
+	}	// end if
+	if (gameCellTemp[i + 1][j].get_Who() == NULL)
+		count = 0;
+
+	AIBTotalScore += count;
+
+	// 3 yonu
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (i < getRow() - 1 && 0 < j && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i - 1][j + 1].get_Who() == 'O')
+		{
+			i++;
+			j++;
+			count++;
+		}	// end loop while
+	}	// end if
+	if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+		count = 0;
+
+	AIBTotalScore += count;
+
+	// 4 yonu
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (j < getColumn() - 1 && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i][j - 1].get_Who() == 'O')
+		{
+			j--;
+			count++;
+		}	// end loop while
+	}	// end if
+	if (gameCellTemp[i][j - 1].get_Who() == NULL)
+		count = 0;
+
+	AIBTotalScore += count;
+
+	// 5 yonunde
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (0 < j && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i][j + 1].get_Who() == 'O')
+		{
+			j++;
+			count++;
+		}	// end loop while
+	}
+	if (gameCellTemp[i][j + 1].get_Who() == NULL)
+		count = 0;
+	int temp = count;
+	AIBTotalScore += count;
+
+	// 6 yonunde
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (0 < i && j < getColumn() - 1 && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i + 1][j - 1].get_Who() == 'O')
+		{
+			i++;
+			j--;
+			count++;
+		}	// end loop while
+	}
+	if (gameCellTemp[i + 1][j - 1].get_Who() == NULL)
+		count = 0;
+
+	AIBTotalScore += count;
+
+	// 7 yonunde
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (i < 0 && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i + 1][j].get_Who() == 'O')
+		{
+			i++;
+			count++;
+		}	// end loop while
+	}
+	if (gameCellTemp[i + 1][j].get_Who() == NULL)
+		count = 0;
+
+	AIBTotalScore += count;
+
+	// 8 yonunde
+	count = 0;
+	i = temp_i;
+	j = temp_j;
+	if (i < 0 && 0 < j && gameCellTemp[i][j].get_Who() == NULL)
+	{
+		while (gameCellTemp[i + 1][j + 1].get_Who() == 'O')
+		{
+			i++;
+			j++;
+			count++;
+		}	// end loop while
+	}
+	if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+		count = 0;
+	AIBTotalScore += count;
+
+	return AIBTotalScore;
+}

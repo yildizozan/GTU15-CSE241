@@ -62,6 +62,8 @@ private:
 	void adding(const int, const string);
 	void control(const int, const string);
 	void calculate(const int, const int, const char);
+	const int findBestPosition(int, int);	// degiskenler degisecek const olmamali
+
 	
 };
 
