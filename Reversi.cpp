@@ -538,6 +538,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		--i;
 		--j;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}
 	if (0 < count)
 	{
@@ -561,6 +563,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	{
 		--i;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}
 	if (0 < count)
 	{
@@ -584,6 +588,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		--i;
 		++j;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}	// end loop while
 	if (0 < count)
 	{
@@ -608,6 +614,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	{
 		--j;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}
 
 	if (0 < count)
@@ -630,6 +638,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	{
 		++j;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}	// end loop while
 
 	if (0 < count)
@@ -652,7 +662,9 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	{
 		++i;
 		--j;
-		count;
+		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}	// endl loop while
 
 	if (0 < count)
@@ -677,6 +689,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	{
 		++i;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}	// end loop while
 	if (0 < count)
 	{
@@ -699,6 +713,8 @@ void Reversi::calculate(const int x, const int y, const char whois)
 		++i;
 		++j;
 		count++;
+		if (gameCellTemp[i + 1][j + 1].get_Who() == NULL)
+			count = 0;
 	}	// end loop while
 
 	if (0 < count)
@@ -714,12 +730,6 @@ void Reversi::calculate(const int x, const int y, const char whois)
 			movement++;
 		}	// end loop while
 	}	// end if - count
-
-
-
-
-
-
 
 	// Hesaplanmis icerigi tekrar geri kopyal?yoruz
 	gameCell = gameCellTemp;
