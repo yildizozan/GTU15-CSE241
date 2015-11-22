@@ -13,6 +13,7 @@ using namespace std;
 class Reversi {
 public:
 	Reversi();
+	Reversi(const int);
 
 	// Mutator & Accessor
 	int getRow() { return row; }
@@ -38,8 +39,8 @@ public:
 	void output(void);
 
 	// Play game functions
-	void playComputer();
-	void playPlayer(const int, const string);
+	void play();
+	void play(const int, const string);
 
 	// Other
 	void score();
@@ -54,19 +55,14 @@ private:
 	int playerScore, AIScore;
 
 	vector< vector<Cell> > gameCell;
-	vector< vector<Cell> > gameCellTemp;
 
 	// Other
-	void expand();
+	void expand(const int, const int);
 	void refresh();
-	void find(const int, const string);
+	void adding(const int, const string);
 	void control(const int, const string);
-
-
-
-
+	int find(const Cell, const Cell);
+	
 };
 
 #endif	/* REVERSI_H */
-
-

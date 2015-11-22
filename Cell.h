@@ -25,7 +25,7 @@ public:
 	void setWho(const char newWho) { who = newWho; }
 
 	// Operator Overloading
-	// bool Cell::operator==(const Cell & temp);
+	bool Cell::operator==(const Cell & temp);
 
 private:
 	int axisX;

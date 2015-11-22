@@ -24,13 +24,29 @@ Reversi::Reversi() // Constructor
 	for (int i = 0; i < getRow(); i++)
 		gameCell[i].resize(getColumn());
 
-	expand();
 
+	gameCell[0][0] = Cell(1, "x1", 'X');
+	gameCell[0][1] = Cell(1, "x2", 'O');
+	gameCell[1][0] = Cell(2, "x1", 'O');
 	gameCell[1][1] = Cell(2, "x2", 'X');
-	gameCell[1][2] = Cell(2, "x3", 'O');
-	gameCell[2][1] = Cell(3, "x2", 'O');
-	gameCell[2][2] = Cell(3, "x3", 'X');
 
+}
+
+Reversi::Reversi(const int a)
+	: row(2), column(2), gameOver(0), who(0), playerScore(0), AIScore(0)
+{
+	gameCell.resize(getRow());
+	for (int i = 0; i < getRow(); i++)
+		gameCell[i].resize(getColumn());
+
+
+	gameCell[0][0] = Cell(1, "x1", 'X');
+	gameCell[0][1] = Cell(1, "x2", 'O');
+	gameCell[1][0] = Cell(2, "x1", 'O');
+	gameCell[1][1] = Cell(2, "x2", 'X');
+
+
+	expand(a, a);
 }
 
 
@@ -48,10 +64,15 @@ void Reversi::output(void)
 	{
 		if (i < getRow())
 		{
-			cout << i + 1 << "\t|";
+			cout << i + 1 << "\t";
 
 			for (int j = 0; j < getColumn(); j++)
-				cout << " " << gameCell[i][j].get_Who() << " ";
+			{
+				if (gameCell[i][j].get_Who() == NULL)
+					cout << " " << "-" << " ";
+				else
+					cout << " " << gameCell[i][j].get_Who() << " ";
+			}
 			cout << "\n";
 		}
 		else
@@ -67,7 +88,7 @@ void Reversi::output(void)
 
 }
 
-void Reversi::playComputer()
+void Reversi::play()
 {
 	// Rastgele degerler olusturuyoruz koordinatlar icin
 	srand(time(NULL));
@@ -79,10 +100,24 @@ void Reversi::playComputer()
 
 	// Rakip oyuncunun taslarinin bulundugu koordinatlari yeni vektore atiyoruz
 	// Boylece oyun alaninda bos olan yerleri taramamis oluruz
+	vector <Cell> myCoord;
 	vector <Cell> opponentCoord;
+	vector <Cell> opponentCoordNULL;
 
-	// Rakip oyuncunun taslarinin nerede oldu?unu ogrencek
-	// Ogrendigi bu bilgileri baska bir vektorde biriktirecek
+	// AI taslarinin koordinatlarini belirliyorum
+	for (int i = 0; i < getRow(); i++)
+	{
+		for (int j = 0; j < getColumn(); j++)
+		{
+			if (gameCell[i][j].get_Who() == 'X')
+			{
+				myCoord.push_back(gameCell[i][j]);
+			}
+		}
+	}
+
+	// Rakip oyuncunun taslarinin nerede oldugunu ogreniyorum
+	// Ogrendigim bu bilgileri baska bir vektorde biriktirecek
 	for (int i = 0; i < getRow(); i++)
 	{
 		for (int j = 0; j < getColumn(); j++)
@@ -94,27 +129,68 @@ void Reversi::playComputer()
 		}
 	}
 
-	bool ok = false;
-	int count = 0;
-	while (ok)
+
+	int a[1000],
+		count = 0;
+	// Oyununcunun taslarinin etrafindaki bos alanlar teker teker secilip kac tasi yok ettigi ogrenilecek
+	for (int k = 0; k < opponentCoord.size(); k++)
 	{
-		for (int i = 0; i < getRow(); i++)
+		for (int i = 1; i < getRow(); i++)
 		{
-			for (int j = 0; j < getColumn(); j++)
+			for (int j = 1; j < getColumn(); j++)
 			{
-				if (gameCell[i][j] == opponentCoord[count])
+				if (opponentCoord[k].get_Who() == gameCell[i][j].get_Who())
 				{
-					count++;
-				}
-			}
-		}
-	}
-	// Olusan degerleri control icin yolluyoruz
-	//control(borderX, borderY_str);
+					// Sol ust carpraz bos
+					if (gameCell[i - 1][j - 1].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i - 1][j - 1]);
+					}
+					// Ust
+					if (gameCell[i - 1][j].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i - 1][j]);
+					}
+					// Sag ust capraz
+					if (gameCell[i - 1][j + 1].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i - 1][j + 1]);
+					}
+					// Sol
+					if (gameCell[i][j - 1].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i][j - 1]);
+					}
+					// Sag
+					if (gameCell[i][j + 1].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i][j + 1]);
+					}
+					// Sol alt capraz
+					if (gameCell[i + 1][j - 1].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i + 1][j - 1]);
+					}
+					// Alt
+					if (gameCell[i + 1][j].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i + 1][j]);
+					}
+					// Sag alt capraz
+					if (gameCell[i + 1][j + 1].get_Who() == NULL)
+					{
+						opponentCoordNULL.push_back(gameCell[i + 1][j + 1]);
+					}
+				} // if compare two Cell
+			} // end for j
+		} // end for i
+	} // end for k
 
-}
 
-void Reversi::playPlayer(const int newAxisX, const string newAxisY)
+} // end play() function
+
+// Play play
+void Reversi::play(const int newAxisX, const string newAxisY)
 {
 	control(newAxisX, newAxisY);
 }
@@ -157,7 +233,7 @@ void Reversi::score() // Her defasinda puanlar bastan hesaplanacak
 void Reversi::newValue()
 {
 		// X koordinatini yine girmemizi saglar
-		cout << "\n";
+		cout << "\n" << "Wrong coordinate..\n";
 		cout << "Axis X again: ";
 		int axisX;
 		cin >> axisX;
@@ -186,16 +262,18 @@ void Reversi::newValue()
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 // Girilen koordinat ilk satir-sutun veya son satir-sutun ise oyun alan? genisler
-void Reversi::expand()
+void Reversi::expand(const int r, const int c)
 {
+	vector< vector<Cell> > gameCellTemp;
 	gameCellTemp = gameCell;
 
+	int a = getRow();
 
 	// New row value
-	setRow(getRow() + 2);
+	setRow(r);
 
 	// New column value
-	setColumn(getColumn() + 2);
+	setColumn(c);
 
 	// Row expand for gameCell
 	gameCell.resize(getRow());
@@ -213,9 +291,10 @@ void Reversi::expand()
 		}
 
 	// Create new matrix and copy (burada önceki matrixi kullanmaliyim o sebeple -2)
-	for (int i = 0; i < getRow() - 2; i++)
-		for (int j = 0; j < getColumn() - 2; j++)
-			gameCell[i + 1][j + 1].setWho(gameCellTemp[i][j].get_Who()); // Eski taslari buyumus olan matrixe kopyalar
+	int k = (getRow() - 2) / 2;
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 2; j++)
+				gameCell[i + k][j + k].setWho(gameCellTemp[i][j].get_Who()); // Eski taslari buyumus olan matrixe kopyalar
 }
 
 // Matrix koordinatlarini tekrar duzenlerü
@@ -223,6 +302,7 @@ void Reversi::expand()
 // axisX ve axisY degelerine bakarak bulur.
 void Reversi::refresh()
 {
+	vector< vector<Cell> > gameCellTemp;
 	gameCellTemp = gameCell;
 
 	// All member of vector should be zero
@@ -243,14 +323,14 @@ void Reversi::refresh()
 // who degiskeni oyun sirasinin kimde oldugunu belirler ona gore X veya O ekrana yazd?r?r.
 // Girilen koordinat bulunur, oyun alaninin genislemesi gerekiyorsa oyun alani genisler ve deger girilir,
 // Oyun alaninin genislemesine gerek yoksa deger girilir ve refresh() fonksiyonu ile koordinatlar tazelenir.
-void Reversi::find(const int x, const string y)
+void Reversi::adding(const int x, const string y)
 {
 	char z;
-	if (getWho() == 0)
+	if (getWho() % 2 == 0)
 	{
 		z = 'O';
 	}
-	else if (getWho() == 1)
+	else if (getWho() % 2 == 1)
 	{
 		z = 'X';
 	}
@@ -266,26 +346,17 @@ void Reversi::find(const int x, const string y)
 			{
 				if (gameCell[i][j].get_AxisY() == y) // Bulmus oldugumuz satirdaki sutunu buluyoruz
 				{
-					if (1 == i + 1 || i + 1 == getRow() || 1 == j + 1 || j + 1 == getColumn())	// Eger koordinatlar sinirda ise oyun alani genisler ve deger atanir
-					{
-						expand();
-						gameCell[i + 1][j + 1].setWho(z);
-					}
-					else	// Deger atanir ve koordinatlar tazelenir.
-					{
-						gameCell[i][j].setWho(z);
-						refresh();
-					}
+					gameCell[i][j].setWho(z);
+					refresh();
 				}
-			}
+			}	// end for j
 		}
-	}
+	}	// end for i
 
 }
 
 // Girilen koordinatlar daha onceden girilmis mi?
 // Hamle yapmaya musait mi onu kontrol edecek.
-// Eger musait ise true dondurecek
 void Reversi::control(const int axisX, const string axisY)
 {
 	int rowTemp, columnTemp;
@@ -297,7 +368,7 @@ void Reversi::control(const int axisX, const string axisY)
 			{
 				rowTemp = i;
 				columnTemp = j;
-				goto bypass;	// donguler daha sonraki karakterleri arast?rmas?na gerek yok.
+				goto bypass;	// donguler daha sonraki karakterleri arastirmasina gerek yok.
 			}
 		}
 	}
@@ -305,22 +376,148 @@ void Reversi::control(const int axisX, const string axisY)
 	bypass:
 
 	// Vector elemaninda herhangi bir deger girilmis mi onu kontrol ediyor.
-	// Ayr? ayr? yapmak yerine de?i?kene atay?p kontrol etmek daha dogru gibi, 1 islem daha az yap?yor.
+	// ayri ayri yapmak yerine de?i?kene atay?p kontrol etmek daha dogru gibi, 1 islem daha az yap?yor.
 	char control = gameCell[rowTemp][columnTemp].get_Who();
-	if (control == 'X' || control == 'O')
+	
+	// Oncelikle 
+	// etrafindaki hucreler bos ise oraya hamle yapilamaz
+	// Kenarlardaki junk degerleri sorgulamasin diye oraya tasmiyoruz
+	// Sorgulama sekli bir tane bos kare secilecek ve etrafindaki komsu hucreler sorgulanacak
+
+	/*	Matrix yapi sistemi(junk degerleri sorgulamamiz gerek calisma seklimize aykiri! :) )
+		A--------------B
+		|              |
+		|              |
+		|              |
+		|              |
+		C--------------D
+	*/
+
+
+	// A kosesi kontrol ediyoruz
+	if (rowTemp == 0 && columnTemp == 0)
 	{
-		if (getWho() == 0)	// Oyuncunun hamlesi demektir
+		if (gameCell[rowTemp][columnTemp + 1].get_Who() == NULL				// 6
+			&& gameCell[rowTemp + 1][columnTemp].get_Who() == NULL			// 7
+			&& gameCell[rowTemp + 1][columnTemp + 1].get_Who() == NULL)		// 9
 		{
 			newValue();
 		}
-		else	// PC'nin hamlesi
+	}
+	// B kosesini kontrol ediyoruz
+	else if (rowTemp == 0 && columnTemp == getColumn() - 1)
+	{
+		if (gameCell[rowTemp][columnTemp - 1].get_Who() == NULL				// 4
+			&& gameCell[rowTemp + 1][columnTemp - 1].get_Who() == NULL		// 7
+			&& gameCell[rowTemp + 1][columnTemp].get_Who() == NULL)			// 8
 		{
-			playComputer();
+			newValue();
 		}
+	}
+	// C kosesini kontrol ediyoruz
+	else if (rowTemp == getRow() - 1 && columnTemp == 0)
+	{
+		if (gameCell[rowTemp - 1][columnTemp].get_Who() == NULL				// 2
+			&& gameCell[rowTemp - 1][columnTemp + 1].get_Who() == NULL		// 3
+			&& gameCell[rowTemp][columnTemp + 1].get_Who() == NULL)			// 6
+		{
+			newValue();
+		}
+	}
+	// D kosesini kontrol ediyoruz
+	else if (rowTemp == getRow() - 1 && columnTemp == columnTemp)
+	{
+		if (gameCell[rowTemp - 1][columnTemp - 1].get_Who() == NULL			// 1
+			&& gameCell[rowTemp - 1][columnTemp].get_Who() == NULL			// 2
+			&& gameCell[rowTemp][columnTemp - 1].get_Who() == NULL)			// 4
+		{
+			newValue();
+		}
+	}
+	// A-B kenari
+	else if (rowTemp == 0)
+	{
+		if (gameCell[rowTemp][columnTemp - 1].get_Who() == NULL				// 4
+			&& gameCell[rowTemp][columnTemp + 1].get_Who() == NULL			// 6
+			&& gameCell[rowTemp + 1][columnTemp - 1].get_Who() == NULL		// 7
+			&& gameCell[rowTemp + 1][columnTemp].get_Who() == NULL			// 8
+			&& gameCell[rowTemp + 1][columnTemp + 1].get_Who() == NULL)		// 9
+		{
+			newValue();
+		}
+	}
+	// C-D kenari
+	else if (rowTemp == getRow() - 1)
+	{
+		if (gameCell[rowTemp - 1][columnTemp - 1].get_Who() == NULL			// 1
+			&& gameCell[rowTemp - 1][columnTemp].get_Who() == NULL			// 2
+			&& gameCell[rowTemp - 1][columnTemp + 1].get_Who() == NULL		// 3
+			&& gameCell[rowTemp][columnTemp - 1].get_Who() == NULL			// 4
+			&& gameCell[rowTemp][columnTemp + 1].get_Who() == NULL)			// 6
+		{
+			newValue();
+		}
+	}
+	// A-C kenari
+	else if (columnTemp == 0)
+	{
+		if (gameCell[rowTemp - 1][columnTemp].get_Who() == NULL				// 2
+			&& gameCell[rowTemp - 1][columnTemp + 1].get_Who() == NULL		// 3
+			&& gameCell[rowTemp][columnTemp + 1].get_Who() == NULL			// 6
+			&& gameCell[rowTemp + 1][columnTemp].get_Who() == NULL			// 8
+			&& gameCell[rowTemp + 1][columnTemp + 1].get_Who() == NULL)		// 9
+		{
+			newValue();
+		}
+	}
+	// B-D kenari
+	else if (columnTemp == getColumn() - 1)
+	{
+		if (gameCell[rowTemp - 1][columnTemp - 1].get_Who() == NULL			// 1
+			&& gameCell[rowTemp - 1][columnTemp].get_Who() == NULL			// 2
+			&& gameCell[rowTemp][columnTemp - 1].get_Who() == NULL			// 4
+			&& gameCell[rowTemp + 1][columnTemp - 1].get_Who() == NULL		// 7
+			&& gameCell[rowTemp + 1][columnTemp].get_Who() == NULL)			// 8
+		{
+			newValue();
+		}
+	}
+	// Etrafindaki tum hucreler bos ise oraya hamlenin yapilamicagini belirtiyoruz.
+	else if (gameCell[rowTemp - 1][columnTemp - 1].get_Who() == NULL		// 1
+		&& gameCell[rowTemp - 1][columnTemp].get_Who() == NULL				// 2
+		&& gameCell[rowTemp - 1][columnTemp + 1].get_Who() == NULL			// 3
+		&& gameCell[rowTemp][columnTemp - 1].get_Who() == NULL				// 4
+		&& gameCell[rowTemp][columnTemp + 1].get_Who() == NULL				// 6
+		&& gameCell[rowTemp + 1][columnTemp - 1].get_Who() == NULL			// 7
+		&& gameCell[rowTemp + 1][columnTemp].get_Who() == NULL				// 8
+		&& gameCell[rowTemp + 1][columnTemp + 1].get_Who() == NULL)			// 9
+	{
+		newValue();
+	}
+	else if (control == 'X' || control == 'O')
+	{
+			newValue();
 	}
 	else
 	{
-		find(axisX, axisY);
+		adding(axisX, axisY);
 	}
+}
+
+int Reversi::find(const Cell current, const Cell orj)
+{
+	int count = 0;
+
+	vector< vector<Cell> > gameCellTemp;
+	gameCellTemp = gameCell;
+
+	for (int i = 0; i < getRow(); i++)
+	{
+		for (int j = 0; j < getColumn(); j++)
+		{
+		}
+	}
+
+	return count;
 }
 

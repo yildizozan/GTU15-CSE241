@@ -14,9 +14,10 @@
 
 using namespace std;
 
-int main(int argc, int** argv)
+int main()
 {
-	Reversi game;
+	int laps = 0;
+	Reversi game(8);
 
 	while (!game.getGameOver())
 	{
@@ -36,26 +37,27 @@ int main(int argc, int** argv)
 			// X koordinatini girmemizi saglar
 			cout << "\n";
 			cout << "Axis X: ";
-			int axisX;
+			int axisX = 1;
 			cin >> axisX;
 
 			// Y koordinatini girmemizi saglar
 			cout << "Axis Y: ";
 			string axisY = "x1";
 			cin >> axisY;
-			game.playPlayer(axisX, axisY);
+
+			game.play(axisX, axisY);
 		}
 		else
 		{
-			game.playComputer();
+			game.play();
 		}
 
 		// Ekrani temizleme
 		system("CLS");
 
 		// S?ran?n kimde oldu?unu belirleme
-		who++;
-		game.setWho(who % 2);
+		laps++;
+		game.setWho(laps % 2);
 	}
 	cout << "\n\n";
 
