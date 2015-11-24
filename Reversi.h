@@ -13,7 +13,7 @@ using namespace std;
 class Reversi {
 public:
 	Reversi();
-	Reversi(const int);
+	Reversi(const int, const int);
 
 	// Mutator & Accessor
 	int getRow() { return row; }
@@ -25,7 +25,7 @@ public:
 	int getWho() const { return who; }
 	void setWho(const int newWho) { who = newWho; }
 
-	int getGameOver() const { return gameOver; }
+	bool getGameOver() const { return gameOver; }
 	void setGameOver(const int newGameOver) { who = newGameOver; }
 
 	int getPlayerScore() const { return playerScore; }
@@ -51,12 +51,12 @@ public:
 private:
 	int row, column;	// Row and Column
 	int who;			// Siranin kimde oldugunu tutuyor
-	int gameOver;		// It check game for game over!
 	int playerScore, AIScore;
 
 	vector< vector<Cell> > gameCell;
 
 	// Other
+	const bool gameOver();		// It check game for game over!
 	void expand(const int, const int);
 	void refresh();
 	void adding(const int, const string);

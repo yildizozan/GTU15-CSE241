@@ -18,7 +18,7 @@
 using namespace std;
 
 Reversi::Reversi() // Constructor
-	: row(2), column(2), gameOver(0), who(0), playerScore(0), AIScore(0)
+	: row(2), column(2), who(0), playerScore(0), AIScore(0)
 {
 	gameCell.resize(getRow());
 	for (int i = 0; i < getRow(); i++)
@@ -32,8 +32,8 @@ Reversi::Reversi() // Constructor
 
 }
 
-Reversi::Reversi(const int a)
-	: row(2), column(2), gameOver(0), who(0), playerScore(0), AIScore(0)
+Reversi::Reversi(const int a, const int b)
+	: row(2), column(2), who(0), playerScore(0), AIScore(0)
 {
 	gameCell.resize(getRow());
 	for (int i = 0; i < getRow(); i++)
@@ -46,7 +46,7 @@ Reversi::Reversi(const int a)
 	gameCell[1][1] = Cell(2, "x2", 'X');
 
 
-	expand(a, a);
+	expand(a, b);
 }
 
 
@@ -224,7 +224,7 @@ void Reversi::newValue()
 
 		// Y koordinatini yine girmemizi saglar
 		cout << "Axis Y again: ";
-		string axisY = "x1";
+		string axisY;
 		cin >> axisY;
 
 		control(axisX, axisY);
@@ -244,6 +244,22 @@ void Reversi::newValue()
 // Private Functions
 //
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+const bool Reversi::gameOver()
+{
+	int count = 0;
+
+	vector< vector<Cell> > gameCellTemp;
+	gameCellTemp = gameCell;
+
+	for (size_t i = 0; i < getRow(); i++)
+		for (size_t j = 0; j < getColumn(); j++)
+			if (gameCellTemp[i][j] == NULL)
+				count++;
+
+	if (count == 0) return true;
+	else return false;
+}
 
 // Girilen koordinat ilk satir-sutun veya son satir-sutun ise oyun alan? genisler
 void Reversi::expand(const int r, const int c)
@@ -326,18 +342,16 @@ void Reversi::adding(const int x, const string y)
 
 	for (int i = 0; i < getRow(); i++)
 	{
-		if (gameCell[i][0].get_AxisX() == x)	// Uygun satiri buluyoruz sutun icin simdilik gerek yok
+		for (int j = 0; j < getRow(); j++)	
 		{
-			for (int j = 0; j < getRow(); j++)	
+			if (gameCell[i][j].get_AxisX() == x && gameCell[i][j].get_AxisY() == y) // Bulmus oldugumuz satirdaki sutunu buluyoruz
 			{
-				if (gameCell[i][j].get_AxisY() == y) // Bulmus oldugumuz satirdaki sutunu buluyoruz
-				{
-					gameCell[i][j].setWho(z);
-					refresh();
-					calculate(i, j, z);
-				}
-			}	// end for j
-		}
+				gameCell[i][j].setWho(z);
+				refresh();
+				calculate(i, j, z);
+				refresh();
+			}
+		}	// end for j
 	}	// end for i
 
 }
@@ -364,6 +378,7 @@ void Reversi::control(const int axisX, const string axisY)
 
 	// Vector elemaninda herhangi bir deger girilmis mi onu kontrol ediyor.
 	// ayri ayri yapmak yerine de?i?kene atay?p kontrol etmek daha dogru gibi, 1 islem daha az yap?yor.
+
 	char control = gameCell[rowTemp][columnTemp].get_Who();
 	
 	// Oncelikle 
@@ -528,7 +543,6 @@ void Reversi::calculate(const int x, const int y, const char whois)
 	{
 		i--;
 		j--;
-		count++;
 		while (gameCellTemp[i][j].get_Who() != whois && 0 < i && i < getRow() - 1 && 0 < j && j < getColumn() - 1)
 		{
 			i--;
@@ -841,8 +855,8 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i - 1][j].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
+	if (gameCellTemp[i - 1][j].get_Who() == NULL && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
 			while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 			{
 			i--;
@@ -859,8 +873,8 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i - 1][j + 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
+	if (gameCellTemp[i - 1][j + 1].get_Who() == 'O1' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
 			while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 			{
 			i--;
@@ -878,9 +892,10 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i][j - 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
-			while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
+	if (gameCellTemp[i][j - 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
+		j--;
+		while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 			{
 			j--;
 			count++;
@@ -896,8 +911,8 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i][j + 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
+	if (gameCellTemp[i][j + 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
 			j++;
 			while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 			{
@@ -916,8 +931,8 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i + 1][j - 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
+	if (gameCellTemp[i + 1][j - 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
 			while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 			{
 			i++;
@@ -935,8 +950,8 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i + 1][j].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
+	if (gameCellTemp[i + 1][j].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
 			while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 			{
 			i++;
@@ -953,8 +968,8 @@ const int Reversi::findBestPosition(int i, int j) // degiskenler degisecek const
 	i = temp_i;
 	j = temp_j;
 
-		if (gameCellTemp[i + 1][j + 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
-		{
+	if (gameCellTemp[i + 1][j + 1].get_Who() == 'O' && 0 <= i && i <= getRow() - 1 && 0 <= j && j <= getColumn() - 1)
+	{
 		while (gameCellTemp[i][j].get_Who() == 'O' && gameCellTemp[i][j].get_Who() != NULL)
 		{
 			i++;
