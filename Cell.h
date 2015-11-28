@@ -1,37 +1,37 @@
 /*
-* File:   Cell.h
+* File:   Cell.cpp
 * Author: Ozan YILDIZ
 *
-* Created on November 12, 2015, 4:06 PM
+* Created on November 25, 2015, 4:06 PM
 */
 
+
 #ifndef CELL_H
-#define	CELL_H
+#define CELL_H
 
 using namespace std;
 
 class Cell {
 public:
-	Cell();
-	Cell(const Cell& copyCell);
-	Cell(char);
-	Cell(int, string, char);
+    Cell();
+    Cell(const int, const string, const char);
+    Cell(const Cell& orig);
+    
+    // Ancestors & Mutators Functions
+    int getRow() const { return axisX; }
+    void setRow(const int newAxisRow) { axisX = newAxisRow; }
 
-	// Mutator & Accessor Functions
-	int get_AxisX() const { return axisX; }
-	string get_AxisY() const { return axisY; }
+    string getColumn() const { return axisY; }
+    void setColumn(const string newAxisColumn) { axisY = newAxisColumn; }
 
-	char get_Who() const { return who; }
-	void setWho(const char newWho) { who = newWho; }
-
-	// Operator Overloading
-	bool Cell::operator==(const Cell & temp);
+    char getWho() const { return axisX; }
+    void setWho(const char newWho) { axisX = newWho; }
 
 private:
-	int axisX;
-	string axisY;
-	char who;
+    int axisX;
+    string axisY;
+    char who;
 };
 
-#endif	/* CELL_H */
+#endif /* CELL_H */
 
