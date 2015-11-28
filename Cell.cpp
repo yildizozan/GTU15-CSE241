@@ -24,4 +24,3 @@ Cell::Cell(const Cell& orig)
 {
 }
 
-
