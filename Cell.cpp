@@ -11,6 +11,7 @@
 #include "Cell.h"
 
 Cell::Cell()
+<<<<<<< HEAD
 	: who(0)
 {
 }
@@ -18,6 +19,10 @@ Cell::Cell()
 Cell::Cell(const char newWho)
 	: who(newWho)
 {
+=======
+{
+    who = '2';
+>>>>>>> origin/master
 }
 
 Cell::Cell(const int newAxisX, const string newAxisY, const char newWho)
