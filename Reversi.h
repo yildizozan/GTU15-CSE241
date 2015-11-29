@@ -17,10 +17,7 @@ using namespace std;
 class Reversi {
 public:
     Reversi();
-<<<<<<< HEAD
 	Reversi(const int, const int);
-=======
->>>>>>> origin/master
     Reversi(const Reversi& orig);
     
     // Play Functions
@@ -45,25 +42,16 @@ private:
     char who;
     
     int row, column;
-<<<<<<< HEAD
 
 	/* Other Functions */
 	void expand(const int, const int);
 	void refresh();
 	void newValue();
 	void controlValue(const int, const string, const char);
-	bool controlPosition(const int, const int, const char);
-	void add(const int, const int);
+	int controlPosition(const int, const int, const char);
+	void add(const int&, const int&);
+	void fillCell(const int, const int, int, int);
 };
 
 #endif /* REVERSI_H */
 
-=======
-    
-    bool control(const int x, const int y, const char who);
-    void newValue();
-    void find(const int x, const string y);
-};
-
-#endif /* REVERSI_H */
->>>>>>> origin/master

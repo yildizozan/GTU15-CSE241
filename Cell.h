@@ -14,10 +14,7 @@ using namespace std;
 class Cell {
 public:
     Cell();
-<<<<<<< HEAD
 	Cell(const char);
-=======
->>>>>>> origin/master
     Cell(const int, const string, const char);
     Cell(const Cell& orig);
     
@@ -28,13 +25,8 @@ public:
     string getColumn() const { return axisY; }
     void setColumn(const string newAxisColumn) { axisY = newAxisColumn; }
 
-<<<<<<< HEAD
     char getWho() const { return who; }
     void setWho(const char newWho) { who = newWho; }
-=======
-    char getWho() const { return axisX; }
-    void setWho(const char newWho) { axisX = newWho; }
->>>>>>> origin/master
 
 private:
     int axisX;

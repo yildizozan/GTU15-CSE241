@@ -15,7 +15,6 @@
 
 
 Reversi::Reversi()
-<<<<<<< HEAD
     : row(8), column(8), who(0)
 {
 	expand(getRow(), getColumn());
@@ -176,7 +175,7 @@ void Reversi::controlValue(const int x, const string y, const char z)
 *      |       |
 *      D-------C
 */
-bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const olmamal? çünkü de?erleri de?i?ecek
+int Reversi::controlPosition(int x, int y, const char who) // argümanlar const olmamal? çünkü de?erleri de?i?ecek
 {
 
 	int tempI = x;
@@ -202,6 +201,7 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 			}
 			x = tempI;
 			y = tempJ;
+
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
 				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
@@ -210,9 +210,10 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 					++x;
 				}
 			}
+
 			x = tempI;
 			y = tempJ;
-			if (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)     //  8
+			if (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)		//  8
 			{
 				while (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)
 				{
@@ -222,9 +223,17 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 				}
 			}
 			// Count
-			if (0 == count)
+			if (0 == count && getWho() == 'O')
 			{
 				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
 			}
 			else
 			{
@@ -237,15 +246,51 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)
+				{
+					++count;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)     //  6
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					--y;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
+				{
+					++count;
+					++x;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 
@@ -254,15 +299,52 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)     //  1
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)
+				{
+					++count;
+					--x;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)
+				{
+					++count;
+					--y;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 
@@ -271,15 +353,51 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)         //  3
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+					++y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)             //  5
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)
+				{
+					++count;
+					++y;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 
@@ -288,23 +406,74 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)
+				{
+					++count;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)             //  5
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)
+				{
+					++count;
+					++y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)     //  6
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					--y;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
+				{
+					++count;
+					++x;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)		//  8
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					++y;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 
@@ -313,23 +482,74 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)     //  1
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)
+				{
+					++count;
+					--x;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)
+				{
+					++count;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)     //  6
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					--y;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
+				{
+					++count;
+					++x;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 
@@ -338,23 +558,74 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)     //  1
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)
+				{
+					++count;
+					--x;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)         //  3
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+					++y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)
+				{
+					++count;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)             //  5
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)
+				{
+					++count;
+					++y;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 
@@ -363,23 +634,74 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)         //  3
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+					++y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)             //  5
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)
+				{
+					++count;
+					++y;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
+				{
+					++count;
+					++x;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)		//  8
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					++y;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 		
@@ -388,35 +710,136 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 		{
 			if (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)     //  1
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)
+				{
+					++count;
+					--x;
+					--y;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+				}
 			}
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)         //  3
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)
+				{
+					++count;
+					--x;
+					++y;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
+
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)
+				{
+					++count;
+					--y;
+					if (gameCell[x][y - 1].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(4, count, x, y);
+				}
 			}
+
 			if (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)             //  5
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x][y + 1].getWho() != who && gameCell[x][y + 1].getWho() != 0)
+				{
+					++count;
+					++y;
+					if (gameCell[x][y + 1].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(5, count, x, y);
+				}
 			}
+
 			if (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)     //  6
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y - 1].getWho() != who && gameCell[x + 1][y - 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					--y;
+					if (gameCell[x + 1][y - 1].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(6, count, x, y);
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
+				{
+					++count;
+					++x;
+				}
 			}
+
+			x = tempI;
+			y = tempJ;
 			if (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)		//  8
 			{
-				// asdasdasdasdasdasd
+				while (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)
+				{
+					++count;
+					++x;
+					++y;
+				}
+			}
+			// Count
+			if (0 == count && getWho() == 'O')
+			{
+				newValue();
+			}
+			else if (0 == count && getWho() == 'X')
+			{
+				return 0;
+			}
+			else if (0 != count && getWho() == 'X')
+			{
+				return count;
+			}
+			else
+			{
+				add(x, y);
 			}
 		}
 	}
@@ -424,355 +847,108 @@ bool Reversi::controlPosition(int x, int y, const char who) // argümanlar const 
 	{
 		newValue();
 	}
-
-	return false;
+	return count;
 }
 
-void Reversi::add(const int, const int)
+void Reversi::add(const int& x, const int& y)
 {
+	if (getWho() == 'O')
+	{
+		gameCell[x][y].setWho('O');
+	}
+	else
+	{
+		gameCell[x][y].setWho('X');
+	}
+
 }
 
-=======
-    : row(5), column(6), who(0)
+void Reversi::fillCell(const int mode, const int movement, int x, int y)
 {
-    gameCell.resize(getRow());
-    for (int i = 0; i < getRow(); i++)
-        gameCell[i].resize(getColumn());
+	int who, move = 0;
+	if (getWho() == 'O')
+	{
+		who = 'O';
+	}
+	else if (getWho() == 'X')
+	{
+		who = 'O';
+	}
+	if (mode == 1)
+	{
+		while (move < movement)
+		{
+			gameCell[x - 1][y - 1].setWho(getWho());
+			--x;
+			--y;
+			++move;
+		}
+	}
+	else if (mode == 2)
+	{
+		while (move < movement)
+		{
+			gameCell[x - 1][y].setWho(getWho());
+			--x;
+			++move;
+		}
+	}
+	else if (mode == 3)
+	{
+		while (move < movement)
+		{
+			gameCell[x - 1][y + 1].setWho(getWho());
+			--x;
+			--y;
+			++move;
+		}
+	}
+	else if (mode == 4)
+	{
+		while (move < movement)
+		{
+			gameCell[x][y - 1].setWho(getWho());
+			--y;
+			++move;
+		}
+	}
+	else if (mode == 5)
+	{
+		while (move < movement)
+		{
+			gameCell[x][y + 1].setWho(getWho());
+			++y;
+			++move;
+		}
+	}
+	else if (mode == 6)
+	{
+		while (move < movement)
+		{
+			gameCell[x + 1][y - 1].setWho(getWho());
+			++x;
+			--y;
+			++move;
+		}
+	}
+	else if (mode == 7)
+	{
+		while (move < movement)
+		{
+			gameCell[x + 1][y].setWho(getWho());
+			++x;
+			++move;
+		}
+	}
+	else if (mode == 8)
+	{
+		while (move < movement)
+		{
+			gameCell[x + 1][y + 1].setWho(getWho());
+			++x;
+			++y;
+			++move;
+		}
+	}
 
-    gameCell[0][0] = Cell();
-    gameCell[0][1] = Cell();
-    gameCell[1][0] = Cell();
-    gameCell[1][1] = Cell();
-        gameCell[1][2] = Cell();
 }
-
-Reversi::Reversi(const Reversi& orig)
-{
-}
-
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-//
-//  PLAY FUNCTIONS
-//
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-
-void playGame()
-{
-
-}
-
-void playGame(const int x, const string y)
-{
-
-}
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-//
-//  OUTPUT FUNCTION
-//
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-
-void Reversi::output() const
-{
-    for (int i = 0; i < getRow(); i++)
-    {
-        for (int j = 0; j < getColumn(); j++)
-        {
-            if (gameCell[i][j].getWho() == 0)
-                cout << " - ";
-            else
-            {
-                cout << gameCell[i][j].getWho();
-                cout << " i ";
-            }
-        }
-        cout << "\n";
-    }
-    
-    return;
-}
-
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-//
-//  OTHER
-//
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-
-/*
- *      A-------B
- *      |       |
- *      |       |
- *      |       |
- *      D-------C
- */
-bool Reversi::control(const int x, const int y, const char who)
-{
-    vector<vector<Cell> > gameCellTemp;
-    gameCellTemp = gameCell;
-    
-    // A Corner
-    if (x == 0, y == 0)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x][y + 1].getWho() != who && gameCellTemp[x][y + 1].getWho() != 0)             //  5
-            {
-            // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y].getWho() != who && gameCellTemp[x + 1][y].getWho() != 0)             //  7
-            {
-            // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y + 1].getWho() != who && gameCellTemp[x + 1][y + 1].getWho() != 0)     //  8
-            {
-            // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // B Corner
-    else if (x == 0, y == getRow() - 1)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  4
-            {
-            // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y - 1].getWho() != who && gameCellTemp[x + 1][y - 1].getWho() != 0)     //  7
-            {
-            // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y].getWho() != who && gameCellTemp[x + 1][y].getWho() != 0)             //  8
-            {
-            // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // C Corner
-    else if (x == getRow() - 1, y == 0)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x - 1][y - 1].getWho() != who && gameCellTemp[x - 1][y - 1].getWho() != 0)     //  1
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)             //  2
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  4
-            {
-               // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // D Corner
-    else if (x == getRow() - 1, y == getColumn() - 1)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x - 1][y].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)             //  2
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y + 1].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)         //  3
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y + 1].getWho() != who && gameCellTemp[x][y + 1].getWho() != 0)             //  5
-            {
-               // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // A-B Side
-    else if (x == 0)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  4
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y + 1].getWho() != who && gameCellTemp[x][y + 1].getWho() != 0)             //  5
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y - 1].getWho() != who && gameCellTemp[x + 1][y - 1].getWho() != 0)     //  6
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y].getWho() != who && gameCellTemp[x + 1][y].getWho() != 0)             //  7
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  8
-            {
-                // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // B-C Side
-    else if (y == getColumn() - 1)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x - 1][y - 1].getWho() != who && gameCellTemp[x - 1][y - 1].getWho() != 0)     //  1
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)             //  2
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  4
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y - 1].getWho() != who && gameCellTemp[x + 1][y - 1].getWho() != 0)     //  6
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y].getWho() != who && gameCellTemp[x + 1][y].getWho() != 0)             //  7
-            {
-                // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // C-D Side
-    else if (x == getRow() - 1)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x - 1][y - 1].getWho() != who && gameCellTemp[x - 1][y - 1].getWho() != 0)     //  1
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)             //  2
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y + 1].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)         //  3
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  4
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y + 1].getWho() != who && gameCellTemp[x][y + 1].getWho() != 0)             //  5
-            {
-               // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    // D-A Side
-    else if (y == 0)
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x - 1][y].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)             //  2
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y + 1].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)         //  3
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y + 1].getWho() != who && gameCellTemp[x][y + 1].getWho() != 0)             //  5
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y - 1].getWho() != who && gameCellTemp[x + 1][y - 1].getWho() != 0)     //  6
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  8
-            {
-                // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-    else
-    {
-        if (gameCellTemp[x][y].getWho() == 0)
-        {
-            if (gameCellTemp[x - 1][y - 1].getWho() != who && gameCellTemp[x - 1][y - 1].getWho() != 0)     //  1
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)             //  2
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x - 1][y + 1].getWho() != who && gameCellTemp[x - 1][y].getWho() != 0)         //  3
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  4
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y + 1].getWho() != who && gameCellTemp[x][y + 1].getWho() != 0)             //  5
-            {
-               // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y - 1].getWho() != who && gameCellTemp[x + 1][y - 1].getWho() != 0)     //  6
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x + 1][y].getWho() != who && gameCellTemp[x + 1][y].getWho() != 0)             //  7
-            {
-                // asdasdasdasdasdasd
-            }
-            if (gameCellTemp[x][y - 1].getWho() != who && gameCellTemp[x][y - 1].getWho() != 0)             //  8
-            {
-                // asdasdasdasdasdasd
-            }
-        }
-    }
-    
-}
-
-void Reversi::newValue()
-{
-    
-    cout << "\nX again: ";
-    int a;
-    cin >> a;
-    
-    cout << "\nY again: ";
-    string b;
-    cin >> b;
-    
-    find(a, b);
-    return;
-}
-
-void Reversi::find(const int x, const string y)
-{
-   vector<vector<Cell> > gameCellTemp;
-    gameCellTemp = gameCell;
-    
-    int axisX, axisY;
-     
-    for (int i = 0; i < getRow(); ++i)
-        for (int j = 0; j < getColumn(); ++j)
-           if (gameCellTemp[i][j].getRow() == x && gameCellTemp[i][j].getColumn() == y)
-           {
-               axisX = i;
-               axisY = j;
-           }
-    
-    control(axisX, axisY, getWho());
-    return;
-}
->>>>>>> origin/master
