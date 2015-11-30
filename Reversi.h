@@ -48,7 +48,7 @@ private:
 	void refresh();
 	void newValue();
 	void controlValue(const int, const string, const char);
-	int controlPosition(const int, const int, const char);
+	int controlPosition(const int, const int);
 	void add(const int, const int);
 	void fillCell(const int, const int, int, int);
 };
