@@ -32,16 +32,32 @@ Reversi::Reversi(const Reversi& orig)
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 //
-//  PLAY FUNCTION-S
+//  PLAY FUNCTIONS
 //
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 void Reversi::playGame()
 {
+	setWho('X');
+
+	vector<Cell> AIBPosition;
+	vector<int> AIBScore;
+
+	for (int i = 0; i < getRow(); i++)
+	{
+		for (int j = 0; j < getColumn(); j++)
+		{
+			AIBPosition.push_back(gameCell[i][j]);
+			AIBScore.push_back(controlPosition(i, j, 'X'));
+		}
+	}
 }
 
 void Reversi::playGame(const int x, const string y)
 {
+	setWho('O');
+
+
 	controlValue(x, y, 'O');
 }
 
@@ -98,16 +114,15 @@ void Reversi::expand(const int x, const int y)
 	for (int i = 0; i < getRow(); i++)
 		gameCell[i].resize(getColumn());
 
-	refresh();
 
 	int xp = (getRow() / 2) - 1;
 	int yp = (getColumn() / 2) - 1;
 
-	gameCell[xp][yp] = Cell('X');
-	gameCell[xp][yp + 1] = Cell('O');
-	gameCell[xp + 1][yp] = Cell('O');
-	gameCell[xp + 1][yp + 1] = Cell('X');
-
+	refresh();
+	gameCell[xp][yp].setWho('X');
+	gameCell[xp][yp + 1].setWho('O');
+	gameCell[xp + 1][yp].setWho('O');
+	gameCell[xp + 1][yp + 1].setWho('X');
 }
 
 void Reversi::refresh()
@@ -117,7 +132,7 @@ void Reversi::refresh()
 		for (int j = 0; j < getColumn(); j++)
 		{
 			string str = "y" + to_string(j + 1);		// Y koordinatini string seklinde olusturur.
-			gameCell[i][j] = Cell(i + 1, str, 0);	// ?lgili hücreye gerekli bilgiler doldurur.
+			gameCell[i][j] = Cell(i + 1, str, 0);		// ?lgili hücreye gerekli bilgiler doldurur.
 		}
 }
 
@@ -164,7 +179,7 @@ void Reversi::controlValue(const int x, const string y, const char z)
 	{
 		newValue();
 	}
-
+	return;
 }
 
 
@@ -180,9 +195,6 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 
 	int tempI = x;
 	int tempJ = y;
-
-	x = tempI;
-	y = tempJ;
 
 	int count = 0;
 
@@ -706,7 +718,7 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 		}
 		
 		// Ortalarda
-		else if (0 < x && x < getRow() && 0 < y && y < getColumn())
+		else
 		{
 			if (gameCell[x - 1][y - 1].getWho() != who && gameCell[x - 1][y - 1].getWho() != 0)     //  1
 			{
@@ -715,10 +727,18 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 					++count;
 					--x;
 					--y;
+					if (gameCell[x - 1][y - 1].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(1, count, x, y);
 				}
 			}
-			x = tempI;
-			y = tempJ;
 
 			if (gameCell[x - 1][y].getWho() != who && gameCell[x - 1][y].getWho() != 0)             //  2
 			{
@@ -726,10 +746,18 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 				{
 					++count;
 					--x;
+					if (gameCell[x - 1][y].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(2, count, x, y);
 				}
 			}
-			x = tempI;
-			y = tempJ;
 
 			if (gameCell[x - 1][y + 1].getWho() != who && gameCell[x - 1][y].getWho() != 0)         //  3
 			{
@@ -738,11 +766,18 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 					++count;
 					--x;
 					++y;
+					if (gameCell[x - 1][y + 1].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(3, count, x, y);
 				}
 			}
-
-			x = tempI;
-			y = tempJ;
 
 			if (gameCell[x][y - 1].getWho() != who && gameCell[x][y - 1].getWho() != 0)             //  4
 			{
@@ -802,19 +837,25 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 				}
 			}
 
-			x = tempI;
-			y = tempJ;
 			if (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)             //  7
 			{
 				while (gameCell[x + 1][y].getWho() != who && gameCell[x + 1][y].getWho() != 0)
 				{
 					++count;
 					++x;
+					if (gameCell[x + 1][y].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(7, count, x, y);
 				}
 			}
 
-			x = tempI;
-			y = tempJ;
 			if (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)		//  8
 			{
 				while (gameCell[x + 1][y + 1].getWho() != who && gameCell[x + 1][y + 1].getWho() != 0)
@@ -822,8 +863,19 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 					++count;
 					++x;
 					++y;
+					if (gameCell[x + 1][y + 1].getWho() == 0)
+					{
+						count = 0;
+					}
+				}
+				x = tempI;
+				y = tempJ;
+				if (count != 0 && getWho() == 'O')
+				{
+					fillCell(8, count, x, y);
 				}
 			}
+
 			// Count
 			if (0 == count && getWho() == 'O')
 			{
@@ -847,10 +899,10 @@ int Reversi::controlPosition(int x, int y, const char who) // argümanlar const o
 	{
 		newValue();
 	}
-	return count;
+	return 0;
 }
 
-void Reversi::add(const int& x, const int& y)
+void Reversi::add(const int x, const int y)
 {
 	if (getWho() == 'O')
 	{
@@ -860,20 +912,16 @@ void Reversi::add(const int& x, const int& y)
 	{
 		gameCell[x][y].setWho('X');
 	}
-
+	return;
 }
 
 void Reversi::fillCell(const int mode, const int movement, int x, int y)
 {
 	int who, move = 0;
-	if (getWho() == 'O')
-	{
-		who = 'O';
-	}
-	else if (getWho() == 'X')
-	{
-		who = 'O';
-	}
+
+	if (getWho() == 'O') { who = 'O'; }
+	else if (getWho() == 'X') { who = 'X'; }
+
 	if (mode == 1)
 	{
 		while (move < movement)

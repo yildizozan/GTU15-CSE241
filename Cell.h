@@ -15,7 +15,8 @@ class Cell {
 public:
     Cell();
 	Cell(const char);
-    Cell(const int, const string, const char);
+	Cell(const int, const string);
+	Cell(const int, const string, const char);
     Cell(const Cell& orig);
     
     // Ancestors & Mutators Functions

@@ -15,11 +15,15 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
+	int laps = 0;
+
 	Reversi game;
 
 	while (true)
 	{
+		game.setWho(laps % 2);
 		game.output();
+		/*
 		cout << "\nX: ";
 		int x;
 		cin >> x;
@@ -29,6 +33,9 @@ int main(int argc, char** argv) {
 		cin >> y;
 
 		game.playGame(x, y);
+		*/
+		game.playGame();
+		laps++;
 		system("CLS");
 	}
 

@@ -20,6 +20,12 @@ Cell::Cell(const char newWho)
 {
 }
 
+Cell::Cell(const int newAxisX, const string newAxisY)
+	: axisX(newAxisX), axisY(newAxisY)
+{
+}
+
+
 Cell::Cell(const int newAxisX, const string newAxisY, const char newWho)
 	: axisX(newAxisX), axisY(newAxisY), who(newWho)
 {
